@@ -183,12 +183,7 @@
     .token-name-row { display: flex; align-items: center; gap: 5px; }
     .token-name { font-size: 16px; font-weight: 600; }
     .verified-badge {
-      width: 17px; height: 17px; border-radius: 50%; background: #b19ffb;
       display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .verified-badge svg {
-      width: 10px; height: 10px;
-      stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
     }
     .token-sub { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
     .token-values { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
@@ -564,16 +559,17 @@
 
 <script>
 // ── COIN METADATA ─────────────────────────────────────────────────
+const CG = 'https://assets.coingecko.com/coins/images';
 const COINS = {
-  sol:  { cgId: 'solana',        name: 'Solana',     sym: 'SOL',  bg: 'linear-gradient(135deg,#9945ff,#14f195)', hasChain: false },
-  eth:  { cgId: 'ethereum',      name: 'Ethereum',   sym: 'ETH',  bg: '#627eea', hasChain: false },
-  btc:  { cgId: 'bitcoin',       name: 'Bitcoin',    sym: 'BTC',  bg: '#f7931a', hasChain: false },
-  mon:  { cgId: 'monad-2',       name: 'Monad',      sym: 'MON',  bg: '#ffffff', hasChain: false },
-  sui:  { cgId: 'sui',           name: 'Sui',        sym: 'SUI',  bg: '#4da2ff', hasChain: false },
-  pol:  { cgId: 'matic-network', name: 'Polygon',    sym: 'POL',  bg: '#8247e5', hasChain: false },
-  hype: { cgId: 'hyperliquid',   name: 'Hyperliquid',sym: 'HYPE', bg: '#00c896', hasChain: false },
-  usdt: { cgId: 'tether',        name: 'Tether',     sym: 'USDT', bg: '#26a17b', hasChain: true  },
-  usdc: { cgId: 'usd-coin',      name: 'USD Coin',   sym: 'USDC', bg: '#2775ca', hasChain: true  },
+  sol:  { cgId: 'solana',        name: 'Solana',      sym: 'SOL',  bg: '#000000', hasChain: false, img: `${CG}/4128/large/solana.png` },
+  eth:  { cgId: 'ethereum',      name: 'Ethereum',    sym: 'ETH',  bg: '#627eea', hasChain: false, img: `${CG}/279/large/ethereum.png` },
+  btc:  { cgId: 'bitcoin',       name: 'Bitcoin',     sym: 'BTC',  bg: '#f7931a', hasChain: false, img: `${CG}/1/large/bitcoin.png` },
+  mon:  { cgId: 'monad-2',       name: 'Monad',       sym: 'MON',  bg: '#200052', hasChain: false, img: `${CG}/50347/large/monad-logo.png` },
+  sui:  { cgId: 'sui',           name: 'Sui',         sym: 'SUI',  bg: '#4da2ff', hasChain: false, img: `${CG}/26375/large/sui_asset.jpeg` },
+  pol:  { cgId: 'matic-network', name: 'Polygon',     sym: 'POL',  bg: '#8247e5', hasChain: false, img: `${CG}/4713/large/matic-token-icon.png` },
+  hype: { cgId: 'hyperliquid',   name: 'Hyperliquid', sym: 'HYPE', bg: '#0d0d0d', hasChain: false, img: `${CG}/35997/large/hyperliquid.png` },
+  usdt: { cgId: 'tether',        name: 'Tether',      sym: 'USDT', bg: '#26a17b', hasChain: true,  img: `${CG}/325/large/Tether.png` },
+  usdc: { cgId: 'usd-coin',      name: 'USD Coin',    sym: 'USDC', bg: '#2775ca', hasChain: true,  img: `${CG}/6319/large/USD_Coin_icon.png` },
 };
 
 // Fallback SVG logos
@@ -754,7 +750,7 @@ function renderWallet() {
 
 function logoImg(key, coin, size = 44) {
   const p = getPrice(key);
-  const imgUrl = p?.image;
+  const imgUrl = coin?.img || p?.image;
   const bg = coin?.bg || '#333';
 
   if (imgUrl) {
@@ -782,8 +778,9 @@ function renderTokenList() {
     const amt = parseFloat(token.amount) || 0;
     const usdVal = p ? amt * p.usd : 0;
     const change = p ? amt * p.change24h : 0;
-    const imgUrl = token.custom ? (p?.image || '') : (p?.image || '');
-    const bg = token.custom ? (token.bg || '#555') : (COINS[token.key]?.bg || '#555');
+    const coinMeta = token.custom ? null : COINS[token.key];
+    const imgUrl = token.custom ? (p?.image || '') : (coinMeta?.img || p?.image || '');
+    const bg = token.custom ? (token.bg || '#555') : (coinMeta?.bg || '#555');
     const sym = token.sym || token.symbol || '';
     const name = token.name || '';
 
@@ -798,7 +795,7 @@ function renderTokenList() {
       <div class="token-info">
         <div class="token-name-row">
           <span class="token-name">${name}</span>
-          <span class="verified-badge"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+          <svg class="verified-badge" width="15" height="15" viewBox="0 0 24 24"><polygon fill="#b19ffb" points="12,2 14.7,5.5 19.1,4.9 18.5,9.3 22,12 18.5,14.7 19.1,19.1 14.7,18.5 12,22 9.3,18.5 4.9,19.1 5.5,14.7 2,12 5.5,9.3 4.9,4.9 9.3,5.5"/><polyline points="8.5 12 11 15 16 9" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <span class="token-sub">${amt % 1 === 0 ? amt : amt.toFixed(4)} ${sym}</span>
       </div>
