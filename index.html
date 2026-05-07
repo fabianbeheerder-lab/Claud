@@ -418,6 +418,141 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── TOKEN DETAIL PAGE ── */
+    .token-detail {
+      position: fixed; inset: 0; z-index: 300;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform .32s cubic-bezier(.4,0,.2,1);
+      max-width: 430px; margin: 0 auto;
+    }
+    .token-detail.open { transform: translateX(0); }
+
+    .td-header {
+      display: flex; align-items: center;
+      padding: 14px 16px 10px; gap: 10px; flex-shrink: 0;
+    }
+    .td-back {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-primary); padding: 4px;
+      display: flex; align-items: center; flex-shrink: 0;
+    }
+    .td-header-center { flex: 1; display: flex; align-items: center; gap: 10px; }
+    .td-header-logo {
+      width: 42px; height: 42px; border-radius: 50%;
+      overflow: hidden; flex-shrink: 0; background: transparent;
+    }
+    .td-header-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .td-header-name { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+    .td-header-sub { font-size: 12px; color: var(--green); display: flex; align-items: center; }
+    .td-header-actions { display: flex; gap: 8px; align-items: center; }
+    .td-follow {
+      background: var(--bg-card); border: none; cursor: pointer;
+      color: var(--text-primary); font-size: 14px; font-weight: 600;
+      padding: 8px 16px; border-radius: 10px; font-family: inherit;
+    }
+    .td-share {
+      background: var(--bg-card); border: none; cursor: pointer;
+      color: var(--text-primary); width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .td-scroll { flex: 1; overflow-y: auto; min-height: 0; padding-bottom: 110px; }
+    .td-scroll::-webkit-scrollbar { display: none; }
+
+    .td-price-section { padding: 8px 16px 12px; }
+    .td-time-indicator { font-size: 13px; color: var(--text-secondary); min-height: 18px; margin-bottom: 2px; }
+    .td-price { font-size: 44px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; }
+    .td-change { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .td-change-usd { font-size: 15px; font-weight: 500; }
+    .td-change-usd.pos { color: var(--green); }
+    .td-change-usd.neg { color: var(--red); }
+    .td-change-pct { font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+    .td-change-pct.pos { background: #143d24; color: var(--green); }
+    .td-change-pct.neg { background: var(--red-badge); color: #fff; }
+
+    .td-chart-wrap { position: relative; width: 100%; height: 230px; touch-action: none; }
+    #tdChart { width: 100%; height: 100%; display: block; }
+
+    .td-timeframes { display: flex; justify-content: space-around; padding: 10px 16px 14px; }
+    .td-tf {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-secondary); font-size: 14px; font-weight: 500;
+      font-family: inherit; padding: 6px 10px; border-radius: 8px;
+    }
+    .td-tf.active { background: var(--bg-card); color: var(--text-primary); font-weight: 700; }
+
+    .td-actions { display: flex; padding: 0 16px 14px; gap: 8px; }
+    .td-action-btn {
+      flex: 1; background: var(--bg-card); border: none; border-radius: 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 16px 6px 14px; cursor: pointer; font-family: inherit;
+    }
+    .td-action-icon { display: flex; align-items: center; justify-content: center; }
+    .td-action-icon svg {
+      width: 20px; height: 20px; stroke: var(--purple-light);
+      fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .td-action-label { font-size: 13px; color: var(--text-primary); font-weight: 400; }
+
+    .td-chat-card {
+      margin: 0 16px 16px; background: var(--bg-card); border-radius: var(--radius);
+      padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .td-chat-avatars { display: flex; }
+    .td-chat-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid var(--bg-card); margin-left: -8px;
+      font-size: 14px; display: flex; align-items: center; justify-content: center;
+      background: var(--bg-card2); overflow: hidden;
+    }
+    .td-chat-avatars .td-chat-avatar:first-child { margin-left: 0; }
+    .td-chat-info { flex: 1; font-size: 14px; color: var(--text-primary); font-weight: 500; }
+    .td-join-btn {
+      background: var(--bg-card2); border: none; cursor: pointer;
+      color: var(--text-primary); font-size: 14px; font-weight: 600;
+      padding: 8px 14px; border-radius: 10px; font-family: inherit;
+    }
+
+    .td-section { padding: 0 16px 16px; }
+    .td-section-title {
+      font-size: 20px; font-weight: 700; margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+    .td-section-arrow { color: var(--text-secondary); font-weight: 400; margin-left: 2px; }
+    .td-pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .td-pos-card { background: var(--bg-card); border-radius: var(--radius); padding: 14px; }
+    .td-pos-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .td-pos-value { font-size: 18px; font-weight: 600; }
+    .td-pos-value.pos { color: var(--green); }
+    .td-pos-value.neg { color: var(--red); }
+
+    .td-perps-card {
+      background: var(--bg-card); border-radius: var(--radius);
+      padding: 16px; display: flex; align-items: center; gap: 14px; cursor: pointer;
+    }
+    .td-perps-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #2d1f6e; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--purple-light); flex-shrink: 0; font-weight: 700;
+    }
+    .td-perps-name { font-size: 16px; font-weight: 700; }
+    .td-perps-sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+    .td-bottom {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px;
+      padding: 12px 16px 36px; background: var(--bg);
+      display: flex; gap: 10px; z-index: 10;
+    }
+    .td-buy-btn, .td-sell-btn {
+      flex: 1; border: none; cursor: pointer; border-radius: 26px;
+      padding: 18px; font-size: 17px; font-weight: 700; font-family: inherit;
+    }
+    .td-buy-btn { background: #ad9ef8; color: #1a1428; }
+    .td-sell-btn { background: #9b8de0; color: #1a1428; }
+
     /* Phantom asterisk spinner */
     .spin-asterisk { animation: spin 0.75s linear infinite; transform-origin: center; }
   </style>
@@ -545,6 +680,115 @@
   </nav>
 
 </div><!-- /phone -->
+
+<!-- TOKEN DETAIL PAGE -->
+<div class="token-detail" id="tokenDetail">
+  <div class="td-header">
+    <button class="td-back" onclick="closeTokenDetail()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="td-header-center">
+      <div class="td-header-logo" id="tdHeaderLogo">
+        <img src="images/solana.png" alt="SOL" onerror="this.style.display='none'">
+      </div>
+      <div>
+        <div class="td-header-name">
+          <span id="tdName">Solana</span>
+          <svg width="17" height="17" viewBox="0 0 24 24"><polygon fill="#b19ffb" points="12,2 14.7,5.5 19.1,4.9 18.5,9.3 22,12 18.5,14.7 19.1,19.1 14.7,18.5 12,22 9.3,18.5 4.9,19.1 5.5,14.7 2,12 5.5,9.3 4.9,4.9 9.3,5.5"/><polyline points="8.5 12 11 15 16 9" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="td-header-sub" id="tdHeaderSub"></div>
+      </div>
+    </div>
+    <div class="td-header-actions">
+      <button class="td-follow">Follow</button>
+      <button class="td-share">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="td-scroll">
+    <div class="td-price-section">
+      <div class="td-time-indicator" id="tdTimeIndicator"></div>
+      <div class="td-price" id="tdPrice">$0.00</div>
+      <div class="td-change">
+        <span class="td-change-usd pos" id="tdChangeUsd">+$0.00</span>
+        <span class="td-change-pct pos" id="tdChangePct">+0.00%</span>
+      </div>
+    </div>
+    <div class="td-chart-wrap" id="tdChartWrap">
+      <canvas id="tdChart"></canvas>
+    </div>
+    <div class="td-timeframes">
+      <button class="td-tf active">1D</button>
+      <button class="td-tf">1W</button>
+      <button class="td-tf">1M</button>
+      <button class="td-tf">1Y</button>
+      <button class="td-tf">All</button>
+    </div>
+    <div class="td-actions">
+      <button class="td-action-btn">
+        <span class="td-action-icon"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+        <span class="td-action-label">Send</span>
+      </button>
+      <button class="td-action-btn">
+        <span class="td-action-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+        <span class="td-action-label">Long</span>
+      </button>
+      <button class="td-action-btn">
+        <span class="td-action-icon"><svg viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></span>
+        <span class="td-action-label">Short</span>
+      </button>
+      <button class="td-action-btn">
+        <span class="td-action-icon"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="var(--purple-light)" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="var(--purple-light)" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="var(--purple-light)" stroke="none"/></svg></span>
+        <span class="td-action-label">More</span>
+      </button>
+    </div>
+    <div class="td-chat-card">
+      <div class="td-chat-avatars">
+        <div class="td-chat-avatar">🦊</div>
+        <div class="td-chat-avatar">🐺</div>
+        <div class="td-chat-avatar">🦅</div>
+      </div>
+      <div class="td-chat-info">Join the SOL community chat</div>
+      <button class="td-join-btn">Join</button>
+    </div>
+    <div class="td-section">
+      <div class="td-section-title">Position <span class="td-section-arrow">›</span></div>
+      <div class="td-pos-grid">
+        <div class="td-pos-card">
+          <div class="td-pos-label">Value</div>
+          <div class="td-pos-value" id="tdPosValue">$0.00</div>
+        </div>
+        <div class="td-pos-card">
+          <div class="td-pos-label">Balance</div>
+          <div class="td-pos-value" id="tdPosBalance">0 SOL</div>
+        </div>
+        <div class="td-pos-card">
+          <div class="td-pos-label">24h Change</div>
+          <div class="td-pos-value" id="tdPos24h">+$0.00</div>
+        </div>
+        <div class="td-pos-card">
+          <div class="td-pos-label">Unrealized Return</div>
+          <div class="td-pos-value" id="tdPosReturn">0.00%</div>
+        </div>
+      </div>
+    </div>
+    <div class="td-section">
+      <div class="td-section-title">Perps <span class="td-section-arrow">›</span></div>
+      <div class="td-perps-card">
+        <div class="td-perps-icon">∞</div>
+        <div>
+          <div class="td-perps-name">Phantom Perps</div>
+          <div class="td-perps-sub">Trade with leverage on SOL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="td-bottom">
+    <button class="td-buy-btn">Buy</button>
+    <button class="td-sell-btn">Sell</button>
+  </div>
+</div>
 
 <!-- SETTINGS OVERLAY -->
 <div class="settings-overlay" id="settingsOverlay">
@@ -792,6 +1036,7 @@ function renderTokenList() {
         <span class="token-usd">${fmt(usdVal)}</span>
         <span class="token-change ${!isZero && change >= 0 ? 'pos' : !isZero && change < 0 ? 'neg' : ''}">${!isZero && change !== 0 ? fmtChange(change) : fmt(0)}</span>
       </div>`;
+    if (!token.custom) div.onclick = () => openTokenDetail(token.key);
     list.appendChild(div);
   });
 }
@@ -1185,6 +1430,189 @@ function showToast(msg) {
 // ── SANITIZE ──────────────────────────────────────────────────────
 function escH(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── TOKEN DETAIL ──────────────────────────────────────────────────
+let _chartData = [];
+let _tdCoin = 'sol';
+let _chartTouchInit = false;
+
+function openTokenDetail(key) {
+  _tdCoin = COINS[key] ? key : 'sol';
+  const coin = COINS[_tdCoin];
+  const p = getPrice(_tdCoin);
+  const price = p?.usd || 0;
+  const change = p?.change24h || 0;
+  const pct = p?.changePct24h || 0;
+
+  document.getElementById('tdName').textContent = coin.name;
+
+  const isUp = pct >= 0;
+  const sub = document.getElementById('tdHeaderSub');
+  sub.textContent = (isUp ? '▲ ' : '▼ ') + Math.abs(pct).toFixed(2) + '%';
+  sub.style.color = isUp ? 'var(--green)' : 'var(--red)';
+
+  document.getElementById('tdPrice').textContent = fmt(price);
+  document.getElementById('tdTimeIndicator').textContent = '';
+
+  const cuEl = document.getElementById('tdChangeUsd');
+  cuEl.textContent = fmtChange(change);
+  cuEl.className = 'td-change-usd ' + (change >= 0 ? 'pos' : 'neg');
+
+  const cpEl = document.getElementById('tdChangePct');
+  cpEl.textContent = fmtPct(pct);
+  cpEl.className = 'td-change-pct ' + (pct >= 0 ? 'pos' : 'neg');
+
+  updateDetailPosition(_tdCoin);
+  _chartData = genChartData(price, pct);
+  _chartTouchInit = false;
+
+  document.getElementById('tokenDetail').classList.add('open');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    renderDetailChart();
+    initChartTouch();
+  }));
+}
+
+function closeTokenDetail() {
+  document.getElementById('tokenDetail').classList.remove('open');
+}
+
+function genChartData(currentPrice, changePct24h) {
+  const n = 288;
+  const startPrice = currentPrice > 0 ? currentPrice / (1 + (changePct24h || 0) / 100) : 100;
+  let price = startPrice;
+  const vol = (currentPrice || 100) * 0.006;
+  const data = [];
+  for (let i = 0; i < n; i++) {
+    const trend = (currentPrice - price) / ((n - i) || 1) * 1.4;
+    price += trend + (Math.random() - 0.48) * vol;
+    price = Math.max(price, (currentPrice || 100) * 0.8);
+    data.push(price);
+  }
+  data[n - 1] = currentPrice;
+  return data;
+}
+
+function renderDetailChart(hoverIdx) {
+  const canvas = document.getElementById('tdChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width, H = rect.height;
+  const data = _chartData;
+  if (!data.length) return;
+
+  const min = Math.min(...data) * 0.999;
+  const max = Math.max(...data) * 1.001;
+  const pT = 10, pB = 20;
+  const toX = i => (i / (data.length - 1)) * W;
+  const toY = v => pT + (1 - (v - min) / (max - min)) * (H - pT - pB);
+
+  const isUp = data[data.length - 1] >= data[0];
+  const lc = isUp ? '#30d158' : '#cc371c';
+
+  const grad = ctx.createLinearGradient(0, pT, 0, H);
+  grad.addColorStop(0, isUp ? 'rgba(48,209,88,0.22)' : 'rgba(204,55,28,0.22)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+  ctx.beginPath();
+  data.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+  ctx.lineTo(toX(data.length - 1), H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  ctx.beginPath();
+  data.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
+  ctx.strokeStyle = lc;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  if (hoverIdx !== undefined && hoverIdx >= 0 && hoverIdx < data.length) {
+    const x = toX(hoverIdx), y = toY(data[hoverIdx]);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x, pT);
+    ctx.lineTo(x, H - pB);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = lc;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function initChartTouch() {
+  if (_chartTouchInit) return;
+  _chartTouchInit = true;
+  const wrap = document.getElementById('tdChartWrap');
+  const canvas = document.getElementById('tdChart');
+
+  function getIdx(clientX) {
+    const r = canvas.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - r.left, r.width));
+    return Math.round((x / r.width) * (_chartData.length - 1));
+  }
+
+  function onMove(e) {
+    e.preventDefault();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const idx = getIdx(cx);
+    renderDetailChart(idx);
+    document.getElementById('tdPrice').textContent = fmt(_chartData[idx] || 0);
+    const mins = (_chartData.length - 1 - idx) * 5;
+    const h = Math.floor(mins / 60), m = mins % 60;
+    document.getElementById('tdTimeIndicator').textContent = mins === 0 ? 'Now' : (h > 0 ? `${h}h ${m}m ago` : `${mins}m ago`);
+  }
+
+  function onEnd() {
+    renderDetailChart();
+    const p = getPrice(_tdCoin);
+    document.getElementById('tdPrice').textContent = fmt(p?.usd || 0);
+    document.getElementById('tdTimeIndicator').textContent = '';
+  }
+
+  wrap.addEventListener('touchstart', onMove, { passive: false });
+  wrap.addEventListener('touchmove', onMove, { passive: false });
+  wrap.addEventListener('touchend', onEnd);
+  wrap.addEventListener('mousemove', onMove);
+  wrap.addEventListener('mouseleave', onEnd);
+}
+
+function updateDetailPosition(key) {
+  const amt = parseFloat(S.amounts[key] || 0);
+  const p = getPrice(key);
+  const price = p?.usd || 0;
+  const value = amt * price;
+  const change = amt * (p?.change24h || 0);
+  const pct = p?.changePct24h || 0;
+  const sym = COINS[key]?.sym || 'SOL';
+  document.getElementById('tdPosValue').textContent = fmt(value);
+  document.getElementById('tdPosBalance').textContent = `${amt % 1 === 0 ? amt : amt.toFixed(4)} ${sym}`;
+  const c24El = document.getElementById('tdPos24h');
+  c24El.textContent = fmtChange(change);
+  c24El.className = 'td-pos-value ' + (change >= 0 ? 'pos' : 'neg');
+  const retEl = document.getElementById('tdPosReturn');
+  retEl.textContent = fmtPct(pct);
+  retEl.className = 'td-pos-value ' + (pct >= 0 ? 'pos' : 'neg');
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
