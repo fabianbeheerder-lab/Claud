@@ -1272,6 +1272,40 @@ function buildSettingsForm() {
     </select>`;
   body.appendChild(langSection);
 
+  // -- DATA SYNC --
+  section('DATA SYNC');
+  const syncDiv = document.createElement('div');
+  syncDiv.style.cssText = 'display:flex;flex-direction:column;gap:8px';
+
+  const fStatus = document.createElement('div');
+  fStatus.style.cssText = 'font-size:13px;padding:2px 0 6px;display:flex;align-items:center;gap:7px';
+  fStatus.innerHTML = _fileHandle
+    ? `<span style="color:var(--green);font-size:18px;line-height:1">●</span><span style="color:var(--text-secondary)">users.json connected</span>`
+    : `<span style="color:var(--text-gray);font-size:18px;line-height:1">○</span><span style="color:var(--text-secondary)">No file connected</span>`;
+  syncDiv.appendChild(fStatus);
+
+  const connectFileBtn = document.createElement('button');
+  connectFileBtn.className = 'save-btn';
+  connectFileBtn.style.cssText = 'background:var(--bg-card);color:var(--text-primary);margin-top:0';
+  connectFileBtn.textContent = _fileHandle ? 'Reconnect users.json' : 'Connect users.json';
+  connectFileBtn.onclick = connectUsersJson;
+  syncDiv.appendChild(connectFileBtn);
+
+  const importFileBtn = document.createElement('button');
+  importFileBtn.className = 'reset-btn';
+  importFileBtn.style.color = 'var(--purple-light)';
+  importFileBtn.textContent = 'Import from File';
+  importFileBtn.onclick = loadUsersJson;
+  syncDiv.appendChild(importFileBtn);
+
+  const exportFileBtn = document.createElement('button');
+  exportFileBtn.className = 'reset-btn';
+  exportFileBtn.style.cssText = 'color:var(--text-secondary);margin-bottom:0';
+  exportFileBtn.textContent = 'Export users.json';
+  exportFileBtn.onclick = downloadUsersJson;
+  syncDiv.appendChild(exportFileBtn);
+  body.appendChild(syncDiv);
+
   // -- SAVE --
   const saveBtn = document.createElement('button');
   saveBtn.className = 'save-btn';
@@ -1356,7 +1390,7 @@ async function addCustomToken(chain) {
   if (tokenData?.id) fetchPrices();
 }
 
-async function saveSettings() {
+async function saveSettings() { // eslint-disable-line
   S.emoji    = document.getElementById('emojiBtn').textContent;
   S.handle   = document.getElementById('sHandle').value.trim().replace(/^@/,'');
   S.name     = document.getElementById('sName').value.trim();
@@ -1379,8 +1413,9 @@ async function saveSettings() {
   });
 
   localStorage.setItem('larpz-s', JSON.stringify(S));
+  const synced = await saveToFile();
   closeSettings();
-  showToast('Saved!');
+  showToast(synced ? 'Saved & synced ✓' : 'Saved!');
   renderWallet();
   fetchPrices();
 }
@@ -1505,35 +1540,37 @@ let _chartTouchInit = false;
 
 function openTokenDetail(key) {
   _tdCoin = COINS[key] ? key : 'sol';
+
+  // Open panel immediately so it always slides in
+  document.getElementById('tokenDetail').classList.add('open');
+
   const coin = COINS[_tdCoin];
   const p = getPrice(_tdCoin);
   const price = p?.usd || 0;
   const change = p?.change24h || 0;
   const pct = p?.changePct24h || 0;
-
-  document.getElementById('tdName').textContent = coin.name;
-
   const isUp = pct >= 0;
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const cls = (id, val) => { const el = document.getElementById(id); if (el) el.className = val; };
+
+  set('tdName', coin.name);
+  set('tdTimeIndicator', '');
+  set('tdPrice', fmt(price));
+
   const sub = document.getElementById('tdHeaderSub');
-  sub.textContent = (isUp ? '▲ ' : '▼ ') + Math.abs(pct).toFixed(2) + '%';
-  sub.style.color = isUp ? 'var(--green)' : 'var(--red)';
+  if (sub) { sub.textContent = (isUp ? '▲ ' : '▼ ') + Math.abs(pct).toFixed(2) + '%'; sub.style.color = isUp ? 'var(--green)' : 'var(--red)'; }
 
-  document.getElementById('tdPrice').textContent = fmt(price);
-  document.getElementById('tdTimeIndicator').textContent = '';
+  set('tdChangeUsd', fmtChange(change));
+  cls('tdChangeUsd', 'td-change-usd ' + (change >= 0 ? 'pos' : 'neg'));
+  set('tdChangePct', fmtPct(pct));
+  cls('tdChangePct', 'td-change-pct ' + (pct >= 0 ? 'pos' : 'neg'));
 
-  const cuEl = document.getElementById('tdChangeUsd');
-  cuEl.textContent = fmtChange(change);
-  cuEl.className = 'td-change-usd ' + (change >= 0 ? 'pos' : 'neg');
+  try { updateDetailPosition(_tdCoin); } catch (e) { console.warn('detail pos:', e); }
 
-  const cpEl = document.getElementById('tdChangePct');
-  cpEl.textContent = fmtPct(pct);
-  cpEl.className = 'td-change-pct ' + (pct >= 0 ? 'pos' : 'neg');
-
-  updateDetailPosition(_tdCoin);
   _chartData = genChartData(price, pct);
   _chartTouchInit = false;
 
-  document.getElementById('tokenDetail').classList.add('open');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     renderDetailChart();
     initChartTouch();
@@ -1664,36 +1701,131 @@ function initChartTouch() {
 }
 
 function updateDetailPosition(key) {
-  const amt = parseFloat(S.amounts[key] || 0);
+  const amt = parseFloat((S.amounts && S.amounts[key]) || 0);
   const p = getPrice(key);
-  const price = p?.usd || 0;
-  const value = amt * price;
+  const value = amt * (p?.usd || 0);
   const change = amt * (p?.change24h || 0);
   const pct = p?.changePct24h || 0;
   const sym = COINS[key]?.sym || 'SOL';
 
-  document.getElementById('tdPosValue').textContent = fmt(value);
-  document.getElementById('tdPosBalance').textContent = `${amt % 1 === 0 ? amt : amt.toFixed(4)} ${sym}`;
-  const c24El = document.getElementById('tdPos24h');
-  c24El.textContent = fmtChange(change);
-  c24El.className = 'td-pos-value ' + (change >= 0 ? 'pos' : 'neg');
-  const retEl = document.getElementById('tdPosReturn');
-  retEl.textContent = fmtPct(pct);
-  retEl.className = 'td-pos-value ' + (pct >= 0 ? 'pos' : 'neg');
+  const g = id => document.getElementById(id);
+  const sv = (id, v) => { const el = g(id); if (el) el.textContent = v; };
+  const sc = (id, v) => { const el = g(id); if (el) el.className = v; };
 
-  document.getElementById('tdStatMcap').textContent = fmtCompact(p?.marketCap || 0);
-  document.getElementById('tdStatVol').textContent = fmtCompact(p?.volume24h || 0);
-  document.getElementById('tdStatSupply').textContent = p?.supply
-    ? (p.supply / 1e6).toFixed(2) + 'M ' + sym : '—';
-  document.getElementById('tdStatAth').textContent = p?.ath ? fmt(p.ath) : '—';
+  sv('tdPosValue', fmt(value));
+  sv('tdPosBalance', `${amt % 1 === 0 ? amt : amt.toFixed(4)} ${sym}`);
+  sv('tdPos24h', fmtChange(change));
+  sc('tdPos24h', 'td-pos-value ' + (change >= 0 ? 'pos' : 'neg'));
+  sv('tdPosReturn', fmtPct(pct));
+  sc('tdPosReturn', 'td-pos-value ' + (pct >= 0 ? 'pos' : 'neg'));
+  sv('tdStatMcap', fmtCompact(p?.marketCap || 0));
+  sv('tdStatVol', fmtCompact(p?.volume24h || 0));
+  sv('tdStatSupply', p?.supply ? (p.supply / 1e6).toFixed(2) + 'M ' + sym : '—');
+  sv('tdStatAth', p?.ath ? fmt(p.ath) : '—');
+}
+
+// ── FILE STORAGE (users.json) ─────────────────────────────────────
+let _fileHandle = null;
+
+function _idb(mode, fn) {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('larpz', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('kv');
+    req.onsuccess = e => {
+      try { res(fn(e.target.result.transaction('kv', mode).objectStore('kv'))); }
+      catch (err) { rej(err); }
+    };
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function _storeHandle(h) {
+  try { await _idb('readwrite', s => new Promise((r, j) => { const q = s.put(h, 'fh'); q.onsuccess = r; q.onerror = j; })); } catch {}
+}
+
+async function initFileStorage() {
+  if (!window.showSaveFilePicker) return;
+  try {
+    const h = await _idb('readonly', s => new Promise(r => { const q = s.get('fh'); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }));
+    if (h) _fileHandle = h;
+  } catch {}
+}
+
+async function saveToFile() {
+  if (!_fileHandle) return false;
+  try {
+    if ((await _fileHandle.requestPermission({ mode: 'readwrite' })) !== 'granted') return false;
+    const w = await _fileHandle.createWritable();
+    await w.write(JSON.stringify(S, null, 2));
+    await w.close();
+    return true;
+  } catch { return false; }
+}
+
+async function connectUsersJson() {
+  if (!window.showSaveFilePicker) { downloadUsersJson(); return; }
+  try {
+    const h = await window.showSaveFilePicker({
+      suggestedName: 'users.json',
+      types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+    });
+    _fileHandle = h;
+    await _storeHandle(h);
+    const ok = await saveToFile();
+    showToast(ok ? 'Synced to users.json ✓' : 'Connected');
+    buildSettingsForm();
+  } catch (e) { if (e.name !== 'AbortError') console.warn(e); }
+}
+
+async function loadUsersJson() {
+  if (!window.showOpenFilePicker) { document.getElementById('fileImportInput').click(); return; }
+  try {
+    const [h] = await window.showOpenFilePicker({
+      types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+    });
+    _fileHandle = h;
+    await _storeHandle(h);
+    const data = JSON.parse(await (await h.getFile()).text());
+    S = { ...defaultSettings(), ...data };
+    localStorage.setItem('larpz-s', JSON.stringify(S));
+    closeSettings();
+    renderWallet();
+    showToast('Loaded from users.json ✓');
+  } catch (e) { if (e.name !== 'AbortError') showToast('Load failed'); }
+}
+
+function downloadUsersJson() {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' }));
+  a.download = 'users.json';
+  a.click();
+  showToast('users.json downloaded');
+}
+
+function handleFileImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      S = { ...defaultSettings(), ...JSON.parse(ev.target.result) };
+      localStorage.setItem('larpz-s', JSON.stringify(S));
+      closeSettings(); renderWallet();
+      showToast('Loaded from users.json ✓');
+    } catch { showToast('Invalid JSON file'); }
+  };
+  r.readAsText(file);
+  e.target.value = '';
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  initFileStorage();
   runAutoBalance();
   renderWallet();
   fetchPrices();
 });
+<input type="file" id="fileImportInput" accept=".json" style="display:none" onchange="handleFileImport(event)">
 </script>
 </body>
 </html>
