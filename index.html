@@ -559,30 +559,13 @@
 
 <script>
 // ── COIN METADATA ─────────────────────────────────────────────────
-const CG = 'https://assets.coingecko.com/coins/images';
 const COINS = {
-  sol:  { cgId: 'solana',        name: 'Solana',      sym: 'SOL',  bg: '#000000', hasChain: false, img: `${CG}/4128/large/solana.png` },
-  eth:  { cgId: 'ethereum',      name: 'Ethereum',    sym: 'ETH',  bg: '#627eea', hasChain: false, img: `${CG}/279/large/ethereum.png` },
-  btc:  { cgId: 'bitcoin',       name: 'Bitcoin',     sym: 'BTC',  bg: '#f7931a', hasChain: false, img: `${CG}/1/large/bitcoin.png` },
-  mon:  { cgId: 'monad-2',       name: 'Monad',       sym: 'MON',  bg: '#200052', hasChain: false, img: `${CG}/50347/large/monad-logo.png` },
-  sui:  { cgId: 'sui',           name: 'Sui',         sym: 'SUI',  bg: '#4da2ff', hasChain: false, img: `${CG}/26375/large/sui_asset.jpeg` },
-  pol:  { cgId: 'matic-network', name: 'Polygon',     sym: 'POL',  bg: '#8247e5', hasChain: false, img: `${CG}/4713/large/matic-token-icon.png` },
-  hype: { cgId: 'hyperliquid',   name: 'Hyperliquid', sym: 'HYPE', bg: '#0d0d0d', hasChain: false, img: `${CG}/35997/large/hyperliquid.png` },
-  usdt: { cgId: 'tether',        name: 'Tether',      sym: 'USDT', bg: '#26a17b', hasChain: true,  img: `${CG}/325/large/Tether.png` },
-  usdc: { cgId: 'usd-coin',      name: 'USD Coin',    sym: 'USDC', bg: '#2775ca', hasChain: true,  img: `${CG}/6319/large/USD_Coin_icon.png` },
+  sol: { cgId: 'solana', name: 'Solana', sym: 'SOL', bg: '#000000', hasChain: false, img: 'images/solana.png' },
 };
 
 // Fallback SVG logos
 const LOGOS = {
   sol: `<svg viewBox="0 0 48 48" fill="none"><path d="M8 34l6-6h26l-6 6H8z" fill="white"/><path d="M8 20l6-6h26l-6 6H8z" fill="white"/><path d="M34 14l6 6H14l6-6h14z" fill="rgba(255,255,255,.7)"/></svg>`,
-  eth: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6L14 24l10 6 10-6L24 6z" fill="rgba(255,255,255,.9)"/><path d="M14 24l10 18 10-18-10 6-10-6z" fill="rgba(255,255,255,.65)"/></svg>`,
-  btc: `<svg viewBox="0 0 48 48" fill="none"><text x="9" y="34" font-size="28" font-weight="900" fill="white" font-family="Arial">₿</text></svg>`,
-  mon: `<svg viewBox="0 0 48 48" fill="none"><rect x="12" y="12" width="24" height="24" rx="5" stroke="#7b61ff" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#7b61ff"/></svg>`,
-  sui: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 7C24 7 12 18 12 28a12 12 0 0 0 24 0c0-10-12-21-12-21z" fill="white"/></svg>`,
-  pol: `<svg viewBox="0 0 48 48" fill="none"><path d="M30 15l-6 3.5-6-3.5-6 3.5v7l6 3.5v7l6-3.5 6 3.5v-7l6-3.5v-7l-6-3.5z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>`,
-  hype:`<svg viewBox="0 0 48 48" fill="none"><path d="M8 24c3-6 7-9 12-9s8 6 12 6 8-6 12-6" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M8 24c3 6 7 9 12 9s8-6 12-6 8 6 12 6" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>`,
-  usdt:`<svg viewBox="0 0 48 48" fill="none"><text x="13" y="34" font-size="26" font-weight="900" fill="white" font-family="Arial">₮</text></svg>`,
-  usdc:`<svg viewBox="0 0 48 48" fill="none"><text x="12" y="33" font-size="24" font-weight="900" fill="white" font-family="Arial">$</text><circle cx="24" cy="24" r="18" stroke="white" stroke-width="2.5" fill="none"/></svg>`,
 };
 
 // ── STATE ─────────────────────────────────────────────────────────
@@ -591,8 +574,8 @@ function defaultSettings() {
     emoji: '👻', handle: 'larpzwallet', name: 'Larpz Wallet',
     currency: 'USD',
     cashShow: true, cashAmount: 0,
-    amounts: { sol:22, eth:0, btc:0, mon:0, sui:0, pol:0, hype:0, usdt:0, usdc:0 },
-    chains: { usdt:'SOL', usdc:'SOL' },
+    amounts: { sol: 0 },
+    chains: {},
     autoSolPlus: 0, autoEvery: 1, autoProgress: 0,
     cgKey: '', cgPro: false,
     customSolana: [], customEthereum: [],
