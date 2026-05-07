@@ -181,6 +181,8 @@
     .token-change { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
     .token-change.pos { color: var(--green); }
     .token-change.neg { color: var(--red); }
+    .token-item.zero .token-usd { font-weight: 400; }
+    .token-item.zero .token-change { font-weight: 400; color: var(--text-secondary) !important; }
 
     .disclosures {
       display: flex; align-items: center; gap: 6px;
@@ -727,8 +729,9 @@ function renderTokenList() {
     const sym = token.sym || token.symbol || '';
     const name = token.name || '';
 
+    const isZero = usdVal === 0;
     const div = document.createElement('div');
-    div.className = 'token-item';
+    div.className = 'token-item' + (isZero ? ' zero' : '');
     div.innerHTML = `
       ${imgUrl
         ? `<div class="token-logo" style="background:${bg}"><img src="${imgUrl}" alt="${sym}" onerror="this.style.display='none'"></div>`
@@ -743,7 +746,7 @@ function renderTokenList() {
       </div>
       <div class="token-values">
         <span class="token-usd">${fmt(usdVal)}</span>
-        <span class="token-change ${change >= 0 ? 'pos' : 'neg'}">${change !== 0 ? fmtChange(change) : '$0.00'}</span>
+        <span class="token-change ${!isZero && change >= 0 ? 'pos' : !isZero && change < 0 ? 'neg' : ''}">${!isZero && change !== 0 ? fmtChange(change) : '$0.00'}</span>
       </div>`;
     list.appendChild(div);
   });
