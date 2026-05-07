@@ -8,41 +8,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg: #0f0f0f;
       --bg-card: #1c1c1e;
       --bg-card2: #2c2c2e;
+      --bg-input: #2c2c2e;
       --purple: #7b61ff;
       --purple-light: #9b8fff;
       --green: #34c759;
       --green-bg: #1a3a23;
+      --red: #ff453a;
       --text-primary: #ffffff;
       --text-secondary: #8e8e93;
       --text-gray: #636366;
-      --border: #2c2c2e;
+      --border: #3a3a3c;
       --radius: 16px;
-      --radius-sm: 12px;
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--text-primary);
       -webkit-font-smoothing: antialiased;
     }
 
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
+    body { display: flex; justify-content: center; }
 
     .phone {
       width: 100%;
@@ -52,14 +45,13 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow: hidden;
     }
 
-    /* ── STICKY HEADER ─────────────────────────────── */
+    /* ── HEADER ── */
     .header {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 50;
       background: var(--bg);
       display: flex;
       align-items: center;
@@ -68,774 +60,1041 @@
     }
 
     .header-avatar {
-      width: 42px;
-      height: 42px;
+      width: 42px; height: 42px;
       border-radius: 50%;
       background: #2c2c2e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 22px;
       flex-shrink: 0;
-      overflow: hidden;
+      cursor: pointer;
     }
 
-    .header-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
+    .header-info { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+    .header-handle { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+    .header-name { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
 
-    .header-handle {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
-
-    .header-name {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-primary);
-      letter-spacing: -0.3px;
-    }
-
-    .header-icons {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
+    .header-icons { display: flex; gap: 18px; align-items: center; }
     .header-icon-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
+      background: none; border: none; cursor: pointer; color: var(--text-primary);
+      display: flex; align-items: center; justify-content: center; padding: 4px;
     }
-
     .header-icon-btn svg {
-      width: 24px;
-      height: 24px;
-      stroke: var(--text-primary);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 24px; height: 24px;
+      stroke: var(--text-primary); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
 
-    /* ── SCROLLABLE CONTENT ────────────────────────── */
-    .scroll-content {
-      flex: 1;
-      overflow-y: auto;
-      padding-bottom: 80px;
-    }
+    /* ── SCROLL CONTENT ── */
+    .scroll-content { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+    .scroll-content::-webkit-scrollbar { display: none; }
 
-    .scroll-content::-webkit-scrollbar {
-      display: none;
+    /* ── BALANCE ── */
+    .balance-section { padding: 8px 20px 24px; }
+    .balance-amount { font-size: 46px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 10px; }
+    .balance-change { display: flex; align-items: center; gap: 8px; }
+    .change-usd { font-size: 16px; font-weight: 600; }
+    .change-usd.pos { color: var(--green); }
+    .change-usd.neg { color: var(--red); }
+    .change-pct {
+      font-size: 13px; font-weight: 700;
+      padding: 3px 9px; border-radius: 8px;
     }
+    .change-pct.pos { background: var(--green-bg); color: var(--green); }
+    .change-pct.neg { background: #3a1a1a; color: var(--red); }
 
-    /* ── BALANCE SECTION ───────────────────────────── */
-    .balance-section {
-      padding: 8px 20px 24px;
-    }
-
-    .balance-amount {
-      font-size: 46px;
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      color: var(--text-primary);
-      line-height: 1.1;
-      margin-bottom: 10px;
-    }
-
-    .balance-change {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .balance-change-usd {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--green);
-    }
-
-    .balance-change-pct {
-      background: var(--green-bg);
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 8px;
-    }
-
-    /* ── ACTION BUTTONS ────────────────────────────── */
-    .actions {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
+    /* ── ACTIONS ── */
+    .actions { display: flex; padding: 0 20px; gap: 10px; margin-bottom: 24px; }
     .action-btn {
-      flex: 1;
-      background: var(--bg-card);
-      border: none;
-      border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 16px 8px;
-      cursor: pointer;
-      transition: background 0.15s;
+      flex: 1; background: var(--bg-card); border: none; border-radius: var(--radius);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 7px; padding: 16px 8px; cursor: pointer; transition: background .15s;
     }
-
-    .action-btn:active {
-      background: var(--bg-card2);
-    }
-
-    .action-icon {
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
+    .action-btn:active { background: var(--bg-card2); }
+    .action-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
     .action-icon svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--purple-light);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 22px; height: 22px;
+      stroke: var(--purple-light); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
+    .action-label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
 
-    .action-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-      letter-spacing: 0.01em;
-    }
-
-    /* ── CASH BALANCE CARD ─────────────────────────── */
+    /* ── CASH CARD ── */
     .cash-card {
       margin: 0 20px 28px;
       background: var(--bg-card);
       border-radius: var(--radius);
       padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
-    .cash-info {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .cash-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .cash-amount {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
+    .cash-info { display: flex; flex-direction: column; gap: 3px; }
+    .cash-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+    .cash-amount { font-size: 20px; font-weight: 700; }
     .add-cash-btn {
-      background: var(--purple);
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      padding: 11px 20px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      letter-spacing: 0.01em;
-      transition: background 0.15s;
+      background: var(--purple); color: #fff; border: none;
+      border-radius: 50px; padding: 11px 20px;
+      font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: background .15s;
     }
+    .add-cash-btn:active { background: var(--purple-light); }
 
-    .add-cash-btn:active {
-      background: var(--purple-light);
-    }
-
-    /* ── TOKENS SECTION ────────────────────────────── */
-    .tokens-header {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 0 20px 14px;
-    }
-
-    .tokens-title {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-primary);
-      letter-spacing: -0.3px;
-    }
-
-    .tokens-arrow {
-      font-size: 18px;
-      color: var(--text-secondary);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .tokens-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 0 20px;
-    }
+    /* ── TOKENS ── */
+    .tokens-header { display: flex; align-items: center; gap: 4px; padding: 0 20px 14px; }
+    .tokens-title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+    .tokens-arrow { font-size: 18px; color: var(--text-secondary); font-weight: 600; margin-top: 2px; }
+    .tokens-list { display: flex; flex-direction: column; gap: 8px; padding: 0 20px; }
 
     .token-item {
-      background: var(--bg-card);
-      border-radius: var(--radius);
+      background: var(--bg-card); border-radius: var(--radius);
       padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: background 0.15s;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer; transition: background .15s;
     }
-
-    .token-item:active {
-      background: var(--bg-card2);
-    }
+    .token-item:active { background: var(--bg-card2); }
 
     .token-logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 900;
-      overflow: hidden;
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
     }
-
-    /* Token logo colors */
-    .token-logo.sol {
-      background: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
+    .token-logo img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
     }
-
-    .token-logo.eth {
-      background: #627eea;
+    .token-logo .logo-fallback {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
     }
+    .token-logo .logo-fallback svg { width: 26px; height: 26px; }
 
-    .token-logo.btc {
-      background: #f7931a;
-    }
-
-    .token-logo.mon {
-      background: #fff;
-    }
-
-    .token-logo.sui {
-      background: #4da2ff;
-    }
-
-    .token-logo.pol {
-      background: #8247e5;
-    }
-
-    .token-logo.hype {
-      background: #00d4aa;
-    }
-
-    /* SVG logos inside token circles */
-    .token-logo svg {
-      width: 26px;
-      height: 26px;
-    }
-
-    .token-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .token-name-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .token-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
+    .token-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+    .token-name-row { display: flex; align-items: center; gap: 5px; }
+    .token-name { font-size: 16px; font-weight: 700; }
     .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 17px;
-      height: 17px;
-      border-radius: 50%;
-      background: #5856d6;
-      flex-shrink: 0;
+      width: 17px; height: 17px; border-radius: 50%; background: #5856d6;
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-
     .verified-badge svg {
-      width: 10px;
-      height: 10px;
-      stroke: #fff;
-      fill: none;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 10px; height: 10px;
+      stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
     }
+    .token-sub { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+    .token-values { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .token-usd { font-size: 16px; font-weight: 700; }
+    .token-change { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .token-change.pos { color: var(--green); }
+    .token-change.neg { color: var(--red); }
 
-    .token-sub {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .token-values {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 3px;
-    }
-
-    .token-usd {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .token-change {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .token-change.positive {
-      color: var(--green);
-    }
-
-    /* ── DISCLOSURES ───────────────────────────────── */
     .disclosures {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      display: flex; align-items: center; gap: 6px;
       padding: 20px 20px 8px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
+      color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer;
+    }
+    .disc-icon {
+      width: 16px; height: 16px; border: 1.5px solid var(--text-secondary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; flex-shrink: 0;
     }
 
-    .disclosures-icon {
-      width: 16px;
-      height: 16px;
-      border: 1.5px solid var(--text-secondary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-secondary);
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 430px;
+      background: var(--bg); border-top: 1px solid var(--border);
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 10px 0 24px; z-index: 50;
+    }
+    .nav-btn {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 8px 18px; border-radius: 10px;
+    }
+    .nav-btn svg {
+      width: 24px; height: 24px;
+      stroke: var(--text-secondary); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .nav-btn.active svg { stroke: var(--purple-light); }
+    .nav-btn.active .fill-active { fill: var(--purple-light); stroke: var(--purple-light); }
+
+    /* ── SETTINGS OVERLAY ── */
+    .settings-overlay {
+      position: fixed; inset: 0;
+      z-index: 200;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      max-width: 430px; margin: 0 auto;
+    }
+    .settings-overlay.open { transform: translateY(0); }
+
+    .settings-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px 14px;
+      flex-shrink: 0;
+    }
+    .settings-title { font-size: 22px; font-weight: 700; }
+    .settings-close {
+      background: var(--bg-card2); border: none; cursor: pointer;
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; color: var(--text-secondary); font-weight: 600;
+      transition: background .15s;
+    }
+    .settings-close:active { background: var(--border); }
+
+    .settings-body {
+      flex: 1; overflow-y: auto; padding: 0 20px 40px;
+    }
+    .settings-body::-webkit-scrollbar { display: none; }
+
+    .settings-section { color: var(--purple-light); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 22px 0 12px; }
+    .settings-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .settings-label { font-size: 15px; color: var(--text-secondary); min-width: 70px; flex-shrink: 0; }
+    .settings-label.at { font-size: 18px; color: var(--text-secondary); min-width: 28px; }
+
+    .settings-input {
+      flex: 1; background: var(--bg-input); border: none; border-radius: 12px;
+      padding: 12px 14px; font-size: 16px; color: var(--text-primary);
+      font-family: inherit; outline: none; min-width: 0;
+      transition: background .15s;
+    }
+    .settings-input:focus { background: #3a3a3c; }
+    .settings-input::placeholder { color: var(--text-gray); }
+
+    .settings-select {
+      flex: 1; background: var(--bg-input); border: none; border-radius: 12px;
+      padding: 12px 14px; font-size: 16px; color: var(--text-primary);
+      font-family: inherit; outline: none;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+      padding-right: 40px; cursor: pointer;
+    }
+    .settings-select option { background: #2c2c2e; }
+
+    /* Emoji picker button */
+    .emoji-btn {
+      background: var(--bg-input); border: none; border-radius: 12px;
+      width: 56px; height: 48px;
+      font-size: 26px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
 
-    /* ── BOTTOM NAV ────────────────────────────────── */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 0 24px;
-      z-index: 100;
+    /* Toggle switch */
+    .toggle-row { display: flex; align-items: center; gap: 10px; }
+    .toggle {
+      width: 52px; height: 30px; border-radius: 15px;
+      background: var(--bg-card2); cursor: pointer;
+      position: relative; transition: background .2s; flex-shrink: 0;
+    }
+    .toggle.on { background: var(--purple); }
+    .toggle::after {
+      content: ''; position: absolute;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: white; top: 2px; left: 2px;
+      transition: left .2s; box-shadow: 0 1px 4px rgba(0,0,0,.4);
+    }
+    .toggle.on::after { left: 24px; }
+    .toggle-label { font-size: 15px; color: var(--text-primary); font-weight: 500; }
+
+    /* Chain selector */
+    .chain-selector {
+      flex: 1; display: flex;
+      background: var(--bg-input); border-radius: 12px;
+      padding: 3px; gap: 3px;
+    }
+    .chain-btn {
+      flex: 1; background: none; border: none; cursor: pointer;
+      padding: 9px; border-radius: 9px;
+      font-size: 14px; font-weight: 700; color: var(--text-secondary);
+      font-family: inherit; letter-spacing: 0.04em; transition: all .15s;
+    }
+    .chain-btn.active { background: var(--purple); color: white; }
+
+    /* Token row in settings */
+    .settings-token-header {
+      display: flex; align-items: center; gap: 10px;
+      margin: 18px 0 10px;
+    }
+    .settings-token-logo {
+      width: 34px; height: 34px; border-radius: 50%;
+      overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .settings-token-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .settings-token-name { font-size: 16px; font-weight: 700; }
+
+    /* Reset button */
+    .reset-btn {
+      width: 100%; background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 14px;
+      font-size: 15px; font-weight: 700; color: #ff6b35;
+      font-family: inherit; cursor: pointer;
+      margin: 6px 0; transition: background .15s;
+    }
+    .reset-btn:active { background: rgba(255,107,53,.08); }
+
+    /* Progress text */
+    .progress-val { font-size: 15px; font-weight: 700; color: var(--purple-light); }
+
+    /* Input with suffix */
+    .input-suffix-row { display: flex; align-items: center; gap: 8px; width: 100%; }
+    .input-suffix { font-size: 14px; color: var(--text-secondary); white-space: nowrap; }
+
+    /* Add token button */
+    .add-token-btn {
+      width: 100%; background: none;
+      border: 1.5px dashed var(--border);
+      border-radius: 14px; padding: 16px;
+      font-size: 15px; color: var(--text-secondary);
+      font-family: inherit; cursor: pointer;
+      text-align: center; transition: border-color .15s, color .15s;
+    }
+    .add-token-btn:active { border-color: var(--purple); color: var(--purple); }
+
+    /* Custom token item */
+    .custom-token-row {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg-input); border-radius: 12px;
+      padding: 10px 12px; margin-bottom: 8px;
+    }
+    .custom-token-row .ct-logo {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--bg-card2); overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .custom-token-row .ct-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .custom-token-row .ct-info { flex: 1; min-width: 0; }
+    .custom-token-row .ct-name { font-size: 14px; font-weight: 700; }
+    .custom-token-row .ct-addr { font-size: 11px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .custom-token-row .ct-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-secondary); font-size: 18px; padding: 4px;
+      line-height: 1;
     }
 
-    .nav-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 18px;
-      border-radius: 10px;
+    /* Save button */
+    .save-btn {
+      width: 100%; background: var(--purple); color: white; border: none;
+      border-radius: 16px; padding: 17px;
+      font-size: 17px; font-weight: 700; cursor: pointer;
+      font-family: inherit; margin-top: 24px;
+      transition: background .15s;
     }
+    .save-btn:active { background: var(--purple-light); }
 
-    .nav-btn svg {
-      width: 24px;
-      height: 24px;
-      stroke: var(--text-secondary);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #333; color: white;
+      padding: 10px 20px; border-radius: 20px;
+      font-size: 14px; font-weight: 600;
+      opacity: 0; transition: all .3s; pointer-events: none;
+      z-index: 300; white-space: nowrap;
     }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .nav-btn.active svg {
-      stroke: var(--purple-light);
+    /* Loading spinner */
+    .price-loading {
+      display: inline-block; width: 12px; height: 12px;
+      border: 2px solid var(--text-secondary);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      margin-left: 8px; vertical-align: middle;
     }
-
-    .nav-btn.active .nav-home-fill {
-      fill: var(--purple-light);
-      stroke: var(--purple-light);
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <div class="phone">
+<div class="phone" id="app">
 
-    <!-- ── STICKY HEADER ── -->
-    <header class="header">
-      <div class="header-avatar">👻</div>
-      <div class="header-info">
-        <span class="header-handle">@larpzwallet</span>
-        <span class="header-name">Larpz Wallet</span>
+  <!-- STICKY HEADER -->
+  <header class="header">
+    <div class="header-avatar" id="headerAvatar">👻</div>
+    <div class="header-info">
+      <span class="header-handle" id="headerHandle">@larpzwallet</span>
+      <span class="header-name" id="headerName">Larpz Wallet</span>
+    </div>
+    <div class="header-icons">
+      <button class="header-icon-btn" id="btnHistory" aria-label="History">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </button>
+      <button class="header-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- SCROLL CONTENT -->
+  <div class="scroll-content">
+
+    <section class="balance-section">
+      <div class="balance-amount" id="balanceAmount">$0.00</div>
+      <div class="balance-change">
+        <span class="change-usd pos" id="changeUsd">+$0.00</span>
+        <span class="change-pct pos" id="changePct">+0.00%</span>
       </div>
-      <div class="header-icons">
-        <!-- Clock icon -->
-        <button class="header-icon-btn" aria-label="History">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
+    </section>
+
+    <div class="actions">
+      <button class="action-btn">
+        <span class="action-icon"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+        <span class="action-label">Send</span>
+      </button>
+      <button class="action-btn">
+        <span class="action-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+        <span class="action-label">Swap</span>
+      </button>
+      <button class="action-btn">
+        <span class="action-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--purple-light)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="3" height="3" fill="var(--purple-light)" stroke="none"/>
+            <rect x="18" y="14" width="3" height="3" fill="var(--purple-light)" stroke="none"/>
+            <rect x="14" y="18" width="3" height="3" fill="var(--purple-light)" stroke="none"/>
+            <rect x="18" y="18" width="3" height="3" fill="var(--purple-light)" stroke="none"/>
+            <rect x="5" y="5" width="3" height="3" rx=".5" fill="var(--purple-light)" stroke="none"/>
+            <rect x="16" y="5" width="3" height="3" rx=".5" fill="var(--purple-light)" stroke="none"/>
+            <rect x="5" y="16" width="3" height="3" rx=".5" fill="var(--purple-light)" stroke="none"/>
           </svg>
-        </button>
-        <!-- Search icon -->
-        <button class="header-icon-btn" aria-label="Search">
-          <svg viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </button>
-      </div>
-    </header>
-
-    <!-- ── SCROLLABLE CONTENT ── -->
-    <div class="scroll-content">
-
-      <!-- Balance -->
-      <section class="balance-section">
-        <div class="balance-amount">$1,957.34</div>
-        <div class="balance-change">
-          <span class="balance-change-usd">+$56.87</span>
-          <span class="balance-change-pct">+2.91%</span>
-        </div>
-      </section>
-
-      <!-- Action Buttons -->
-      <div class="actions">
-        <!-- Send -->
-        <button class="action-btn">
-          <span class="action-icon">
-            <svg viewBox="0 0 24 24">
-              <line x1="22" y1="2" x2="11" y2="13"/>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </span>
-          <span class="action-label">Send</span>
-        </button>
-        <!-- Swap -->
-        <button class="action-btn">
-          <span class="action-icon">
-            <svg viewBox="0 0 24 24">
-              <polyline points="17 1 21 5 17 9"/>
-              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-              <polyline points="7 23 3 19 7 15"/>
-              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-            </svg>
-          </span>
-          <span class="action-label">Swap</span>
-        </button>
-        <!-- Receive -->
-        <button class="action-btn">
-          <span class="action-icon">
-            <svg viewBox="0 0 24 24">
-              <rect x="3" y="3" width="7" height="7" rx="1"/>
-              <rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/>
-              <rect x="14" y="14" width="3" height="3"/>
-              <rect x="18" y="14" width="3" height="3"/>
-              <rect x="14" y="18" width="3" height="3"/>
-              <rect x="18" y="18" width="3" height="3"/>
-              <!-- QR inner dots -->
-              <rect x="5" y="5" width="3" height="3" rx="0.5" style="fill:#9b8fff;stroke:none"/>
-              <rect x="16" y="5" width="3" height="3" rx="0.5" style="fill:#9b8fff;stroke:none"/>
-              <rect x="5" y="16" width="3" height="3" rx="0.5" style="fill:#9b8fff;stroke:none"/>
-            </svg>
-          </span>
-          <span class="action-label">Receive</span>
-        </button>
-        <!-- Buy -->
-        <button class="action-btn">
-          <span class="action-icon">
-            <svg viewBox="0 0 24 24">
-              <line x1="12" y1="1" x2="12" y2="23"/>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </span>
-          <span class="action-label">Buy</span>
-        </button>
-      </div>
-
-      <!-- Cash Balance Card -->
-      <div class="cash-card">
-        <div class="cash-info">
-          <span class="cash-label">Cash Balance</span>
-          <span class="cash-amount">$0.00</span>
-        </div>
-        <button class="add-cash-btn">Add Cash</button>
-      </div>
-
-      <!-- Tokens -->
-      <div class="tokens-header">
-        <span class="tokens-title">Tokens</span>
-        <span class="tokens-arrow">›</span>
-      </div>
-
-      <div class="tokens-list">
-
-        <!-- Solana -->
-        <div class="token-item">
-          <div class="token-logo sol">
-            <!-- Solana S logo -->
-            <svg viewBox="0 0 64 64" fill="none">
-              <path d="M10 45.5l7.5-7.5h36.5l-7.5 7.5H10z" fill="#fff"/>
-              <path d="M10 26l7.5-7.5h36.5L46.5 26H10z" fill="#fff"/>
-              <path d="M46.5 18l7.5 7.5H17.5L10 18h36.5z" fill="#fff"/>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Solana</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">22 SOL</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$1,957.34</span>
-            <span class="token-change positive">+$56.87</span>
-          </div>
-        </div>
-
-        <!-- Ethereum -->
-        <div class="token-item">
-          <div class="token-logo eth">
-            <!-- ETH diamond -->
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M16 4l-8 12 8 5 8-5L16 4z" fill="rgba(255,255,255,0.85)"/>
-              <path d="M8 16l8 12 8-12-8 5L8 16z" fill="rgba(255,255,255,0.65)"/>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Ethereum</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">0 ETH</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$0.00</span>
-            <span class="token-change">$0.00</span>
-          </div>
-        </div>
-
-        <!-- Bitcoin -->
-        <div class="token-item">
-          <div class="token-logo btc">
-            <!-- BTC B -->
-            <svg viewBox="0 0 32 32" fill="none">
-              <text x="7" y="23" font-size="20" font-weight="900" fill="white" font-family="Arial,sans-serif">₿</text>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Bitcoin</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">0 BTC</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$0.00</span>
-            <span class="token-change">$0.00</span>
-          </div>
-        </div>
-
-        <!-- Monad -->
-        <div class="token-item">
-          <div class="token-logo mon" style="background:#fff;">
-            <!-- Monad diamond/square icon -->
-            <svg viewBox="0 0 32 32" fill="none">
-              <rect x="8" y="8" width="16" height="16" rx="3" stroke="#6b21a8" stroke-width="2.5" fill="none"/>
-              <circle cx="16" cy="16" r="3.5" fill="#6b21a8"/>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Monad</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">0 MON</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$0.00</span>
-            <span class="token-change">$0.00</span>
-          </div>
-        </div>
-
-        <!-- Sui -->
-        <div class="token-item">
-          <div class="token-logo sui">
-            <!-- Sui droplet -->
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M16 5C16 5 8 13 8 19a8 8 0 0 0 16 0c0-6-8-14-8-14z" fill="white"/>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Sui</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">0 SUI</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$0.00</span>
-            <span class="token-change">$0.00</span>
-          </div>
-        </div>
-
-        <!-- Polygon -->
-        <div class="token-item">
-          <div class="token-logo pol">
-            <!-- Polygon logo -->
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M20 10l-4 2.3-4-2.3L8 12.6v5.2l4 2.3v4.6l4-2.3 4 2.3v-4.6l4-2.3v-5.2L20 10z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Polygon</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">0 POL</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$0.00</span>
-            <span class="token-change">$0.00</span>
-          </div>
-        </div>
-
-        <!-- Hyperliquid -->
-        <div class="token-item">
-          <div class="token-logo hype">
-            <!-- Hyperliquid squiggle / bowtie -->
-            <svg viewBox="0 0 32 32" fill="none">
-              <path d="M6 16c2-4 5-6 8-6s5 4 8 4 5-4 8-4" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              <path d="M6 16c2 4 5 6 8 6s5-4 8-4 5 4 8 4" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            </svg>
-          </div>
-          <div class="token-info">
-            <div class="token-name-row">
-              <span class="token-name">Hyperliquid</span>
-              <span class="verified-badge">
-                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
-              </span>
-            </div>
-            <span class="token-sub">0 HYPE</span>
-          </div>
-          <div class="token-values">
-            <span class="token-usd">$0.00</span>
-            <span class="token-change">$0.00</span>
-          </div>
-        </div>
-
-      </div><!-- /tokens-list -->
-
-      <!-- View Disclosures -->
-      <div class="disclosures">
-        <div class="disclosures-icon">i</div>
-        <span>View disclosures</span>
-      </div>
-
-    </div><!-- /scroll-content -->
-
-    <!-- ── BOTTOM NAV ── -->
-    <nav class="bottom-nav">
-      <!-- Home (active) -->
-      <button class="nav-btn active" aria-label="Home">
-        <svg viewBox="0 0 24 24">
-          <path class="nav-home-fill" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linejoin="round"/>
-        </svg>
+        </span>
+        <span class="action-label">Receive</span>
       </button>
-      <!-- Cards/Wallet -->
-      <button class="nav-btn" aria-label="Cards">
-        <svg viewBox="0 0 24 24">
-          <rect x="2" y="5" width="20" height="14" rx="2"/>
-          <line x1="2" y1="10" x2="22" y2="10"/>
-        </svg>
+      <button class="action-btn" id="btnBuy" onclick="openSettings()">
+        <span class="action-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+        <span class="action-label">Buy</span>
       </button>
-      <!-- Swap -->
-      <button class="nav-btn" aria-label="Swap">
-        <svg viewBox="0 0 24 24">
-          <polyline points="17 1 21 5 17 9"/>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-          <polyline points="7 23 3 19 7 15"/>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-        </svg>
-      </button>
-      <!-- Messages -->
-      <button class="nav-btn" aria-label="Messages">
-        <svg viewBox="0 0 24 24">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-      </button>
-      <!-- Search -->
-      <button class="nav-btn" aria-label="Search">
-        <svg viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
-    </nav>
+    </div>
 
-  </div><!-- /phone -->
+    <div class="cash-card" id="cashCard">
+      <div class="cash-info">
+        <span class="cash-label">Cash Balance</span>
+        <span class="cash-amount" id="cashAmountDisplay">$0.00</span>
+      </div>
+      <button class="add-cash-btn">Add Cash</button>
+    </div>
+
+    <div class="tokens-header">
+      <span class="tokens-title">Tokens</span>
+      <span class="tokens-arrow">›</span>
+    </div>
+    <div class="tokens-list" id="tokensList"></div>
+
+    <div class="disclosures">
+      <div class="disc-icon">i</div>
+      <span>View disclosures</span>
+    </div>
+
+  </div><!-- /scroll-content -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" aria-label="Home">
+      <svg viewBox="0 0 24 24"><path class="fill-active" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="nav-btn" aria-label="Cards">
+      <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    </button>
+    <button class="nav-btn" aria-label="Swap">
+      <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    </button>
+    <button class="nav-btn" aria-label="Messages">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+    <button class="nav-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+  </nav>
+
+</div><!-- /phone -->
+
+<!-- SETTINGS OVERLAY -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-topbar">
+    <span class="settings-title">Settings</span>
+    <button class="settings-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="settings-body" id="settingsBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── COIN METADATA ─────────────────────────────────────────────────
+const COINS = {
+  sol:  { cgId: 'solana',        name: 'Solana',     sym: 'SOL',  bg: 'linear-gradient(135deg,#9945ff,#14f195)', hasChain: false },
+  eth:  { cgId: 'ethereum',      name: 'Ethereum',   sym: 'ETH',  bg: '#627eea', hasChain: false },
+  btc:  { cgId: 'bitcoin',       name: 'Bitcoin',    sym: 'BTC',  bg: '#f7931a', hasChain: false },
+  mon:  { cgId: 'monad-2',       name: 'Monad',      sym: 'MON',  bg: '#ffffff', hasChain: false },
+  sui:  { cgId: 'sui',           name: 'Sui',        sym: 'SUI',  bg: '#4da2ff', hasChain: false },
+  pol:  { cgId: 'matic-network', name: 'Polygon',    sym: 'POL',  bg: '#8247e5', hasChain: false },
+  hype: { cgId: 'hyperliquid',   name: 'Hyperliquid',sym: 'HYPE', bg: '#00c896', hasChain: false },
+  usdt: { cgId: 'tether',        name: 'Tether',     sym: 'USDT', bg: '#26a17b', hasChain: true  },
+  usdc: { cgId: 'usd-coin',      name: 'USD Coin',   sym: 'USDC', bg: '#2775ca', hasChain: true  },
+};
+
+// Fallback SVG logos
+const LOGOS = {
+  sol: `<svg viewBox="0 0 48 48" fill="none"><path d="M8 34l6-6h26l-6 6H8z" fill="white"/><path d="M8 20l6-6h26l-6 6H8z" fill="white"/><path d="M34 14l6 6H14l6-6h14z" fill="rgba(255,255,255,.7)"/></svg>`,
+  eth: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6L14 24l10 6 10-6L24 6z" fill="rgba(255,255,255,.9)"/><path d="M14 24l10 18 10-18-10 6-10-6z" fill="rgba(255,255,255,.65)"/></svg>`,
+  btc: `<svg viewBox="0 0 48 48" fill="none"><text x="9" y="34" font-size="28" font-weight="900" fill="white" font-family="Arial">₿</text></svg>`,
+  mon: `<svg viewBox="0 0 48 48" fill="none"><rect x="12" y="12" width="24" height="24" rx="5" stroke="#7b61ff" stroke-width="3"/><circle cx="24" cy="24" r="5" fill="#7b61ff"/></svg>`,
+  sui: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 7C24 7 12 18 12 28a12 12 0 0 0 24 0c0-10-12-21-12-21z" fill="white"/></svg>`,
+  pol: `<svg viewBox="0 0 48 48" fill="none"><path d="M30 15l-6 3.5-6-3.5-6 3.5v7l6 3.5v7l6-3.5 6 3.5v-7l6-3.5v-7l-6-3.5z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>`,
+  hype:`<svg viewBox="0 0 48 48" fill="none"><path d="M8 24c3-6 7-9 12-9s8 6 12 6 8-6 12-6" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M8 24c3 6 7 9 12 9s8-6 12-6 8 6 12 6" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>`,
+  usdt:`<svg viewBox="0 0 48 48" fill="none"><text x="13" y="34" font-size="26" font-weight="900" fill="white" font-family="Arial">₮</text></svg>`,
+  usdc:`<svg viewBox="0 0 48 48" fill="none"><text x="12" y="33" font-size="24" font-weight="900" fill="white" font-family="Arial">$</text><circle cx="24" cy="24" r="18" stroke="white" stroke-width="2.5" fill="none"/></svg>`,
+};
+
+// ── STATE ─────────────────────────────────────────────────────────
+function defaultSettings() {
+  return {
+    emoji: '👻', handle: 'larpzwallet', name: 'Larpz Wallet',
+    currency: 'USD',
+    cashShow: true, cashAmount: 0,
+    amounts: { sol:22, eth:0, btc:0, mon:0, sui:0, pol:0, hype:0, usdt:0, usdc:0 },
+    chains: { usdt:'SOL', usdc:'SOL' },
+    autoSolPlus: 0, autoEvery: 1, autoProgress: 0,
+    cgKey: '', cgPro: false,
+    customSolana: [], customEthereum: [],
+    language: 'EN',
+  };
+}
+
+let S = (() => {
+  try { return JSON.parse(localStorage.getItem('larpz-s')) || defaultSettings(); }
+  catch { return defaultSettings(); }
+})();
+
+let prices = {}; // cgId -> { usd, change24h, changePct24h, image }
+
+// ── COINGECKO ─────────────────────────────────────────────────────
+async function fetchPrices() {
+  const ids = Object.values(COINS).map(c => c.cgId);
+  S.customSolana.forEach(t => { if (t.cgId) ids.push(t.cgId); });
+  S.customEthereum.forEach(t => { if (t.cgId) ids.push(t.cgId); });
+
+  const base = S.cgPro
+    ? 'https://pro-api.coingecko.com/api/v3'
+    : 'https://api.coingecko.com/api/v3';
+
+  const headers = { 'Accept': 'application/json' };
+  if (S.cgKey) headers[S.cgPro ? 'x-cg-pro-api-key' : 'x-cg-demo-api-key'] = S.cgKey;
+
+  try {
+    const url = `${base}/coins/markets?vs_currency=usd&ids=${[...new Set(ids)].join(',')}&price_change_percentage=24h&per_page=50`;
+    const res = await fetch(url, { headers });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    data.forEach(c => {
+      prices[c.id] = {
+        usd: c.current_price || 0,
+        change24h: c.price_change_24h || 0,
+        changePct24h: c.price_change_percentage_24h || 0,
+        image: c.image || null,
+      };
+    });
+    renderWallet();
+  } catch (e) {
+    console.warn('CoinGecko fetch failed:', e.message);
+    renderWallet();
+  }
+}
+
+async function lookupCustomToken(address, chain) {
+  if (!S.cgKey && !S.cgPro) return null;
+  const base = S.cgPro ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
+  const headers = { 'Accept': 'application/json' };
+  headers[S.cgPro ? 'x-cg-pro-api-key' : 'x-cg-demo-api-key'] = S.cgKey;
+  const network = chain === 'ETH' ? 'ethereum' : 'solana';
+  try {
+    const res = await fetch(`${base}/coins/${network}/contract/${address}`, { headers });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch { return null; }
+}
+
+// ── FORMAT HELPERS ────────────────────────────────────────────────
+function fmt(n, decimals = 2) {
+  if (n === undefined || n === null || isNaN(n)) return '$0.00';
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(n);
+}
+
+function fmtChange(n) {
+  if (!n) return '$0.00';
+  return (n >= 0 ? '+' : '') + fmt(n);
+}
+
+function fmtPct(n) {
+  if (!n) return '0.00%';
+  return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+}
+
+function getPrice(key) {
+  const coin = COINS[key];
+  if (!coin) return null;
+  return prices[coin.cgId] || null;
+}
+
+// ── RENDER WALLET ─────────────────────────────────────────────────
+function renderWallet() {
+  document.getElementById('headerAvatar').textContent = S.emoji;
+  document.getElementById('headerHandle').textContent = '@' + S.handle;
+  document.getElementById('headerName').textContent = S.name;
+
+  let totalUsd = parseFloat(S.cashAmount) || 0;
+  let totalChange = 0;
+  let prevTotal = totalUsd;
+
+  Object.keys(COINS).forEach(key => {
+    const amt = parseFloat(S.amounts[key]) || 0;
+    const p = getPrice(key);
+    if (p && amt > 0) {
+      totalUsd += amt * p.usd;
+      totalChange += amt * p.change24h;
+      prevTotal += amt * (p.usd - p.change24h);
+    }
+  });
+
+  // Custom tokens
+  [...S.customSolana, ...S.customEthereum].forEach(t => {
+    const amt = parseFloat(t.amount) || 0;
+    const p = t.cgId ? prices[t.cgId] : null;
+    if (p && amt > 0) {
+      totalUsd += amt * p.usd;
+      totalChange += amt * p.change24h;
+    }
+  });
+
+  document.getElementById('balanceAmount').textContent = fmt(totalUsd);
+
+  const changeUsdEl = document.getElementById('changeUsd');
+  const changePctEl = document.getElementById('changePct');
+  changeUsdEl.textContent = fmtChange(totalChange);
+  changeUsdEl.className = 'change-usd ' + (totalChange >= 0 ? 'pos' : 'neg');
+
+  const pct = prevTotal > 0 ? (totalChange / prevTotal * 100) : 0;
+  changePctEl.textContent = fmtPct(pct);
+  changePctEl.className = 'change-pct ' + (pct >= 0 ? 'pos' : 'neg');
+
+  // Cash card
+  const cashCard = document.getElementById('cashCard');
+  if (S.cashShow) {
+    cashCard.style.display = 'flex';
+    document.getElementById('cashAmountDisplay').textContent = fmt(parseFloat(S.cashAmount) || 0);
+  } else {
+    cashCard.style.display = 'none';
+  }
+
+  renderTokenList();
+}
+
+function logoImg(key, coin, size = 44) {
+  const p = getPrice(key);
+  const imgUrl = p?.image;
+  const bg = coin?.bg || '#333';
+
+  if (imgUrl) {
+    return `<div class="token-logo" style="background:${bg}">
+      <img src="${imgUrl}" alt="${key}" onerror="this.style.display='none'">
+    </div>`;
+  }
+  return `<div class="token-logo" style="background:${bg}">
+    <div class="logo-fallback">${LOGOS[key] || ''}</div>
+  </div>`;
+}
+
+function renderTokenList() {
+  const list = document.getElementById('tokensList');
+  list.innerHTML = '';
+
+  const allTokens = [
+    ...Object.keys(COINS).map(key => ({ key, ...COINS[key], amount: parseFloat(S.amounts[key]) || 0, custom: false })),
+    ...S.customSolana.map((t, i) => ({ ...t, key: `cSOL_${i}`, custom: true })),
+    ...S.customEthereum.map((t, i) => ({ ...t, key: `cETH_${i}`, custom: true })),
+  ];
+
+  allTokens.forEach(token => {
+    const p = token.custom ? (token.cgId ? prices[token.cgId] : null) : getPrice(token.key);
+    const amt = parseFloat(token.amount) || 0;
+    const usdVal = p ? amt * p.usd : 0;
+    const change = p ? amt * p.change24h : 0;
+    const imgUrl = token.custom ? (p?.image || '') : (p?.image || '');
+    const bg = token.custom ? (token.bg || '#555') : (COINS[token.key]?.bg || '#555');
+    const sym = token.sym || token.symbol || '';
+    const name = token.name || '';
+
+    const div = document.createElement('div');
+    div.className = 'token-item';
+    div.innerHTML = `
+      ${imgUrl
+        ? `<div class="token-logo" style="background:${bg}"><img src="${imgUrl}" alt="${sym}" onerror="this.style.display='none'"></div>`
+        : `<div class="token-logo" style="background:${bg}"><div class="logo-fallback">${LOGOS[token.key] || `<span style="font-size:13px;font-weight:900;color:white">${sym.slice(0,3)}</span>`}</div></div>`
+      }
+      <div class="token-info">
+        <div class="token-name-row">
+          <span class="token-name">${name}</span>
+          <span class="verified-badge"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></span>
+        </div>
+        <span class="token-sub">${amt % 1 === 0 ? amt : amt.toFixed(4)} ${sym}</span>
+      </div>
+      <div class="token-values">
+        <span class="token-usd">${fmt(usdVal)}</span>
+        <span class="token-change ${change >= 0 ? 'pos' : 'neg'}">${change !== 0 ? fmtChange(change) : '$0.00'}</span>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+// ── SETTINGS MODAL ────────────────────────────────────────────────
+function openSettings() {
+  buildSettingsForm();
+  document.getElementById('settingsOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function buildSettingsForm() {
+  const body = document.getElementById('settingsBody');
+  body.innerHTML = '';
+
+  // Helper builders
+  const section = (label) => {
+    const el = document.createElement('div');
+    el.className = 'settings-section';
+    el.textContent = label;
+    body.appendChild(el);
+  };
+
+  const row = (labelText, controlHtml, labelClass = '') => {
+    const el = document.createElement('div');
+    el.className = 'settings-row';
+    el.innerHTML = `<span class="settings-label ${labelClass}">${labelText}</span>${controlHtml}`;
+    body.appendChild(el);
+    return el;
+  };
+
+  const input = (id, value, type = 'text', placeholder = '') =>
+    `<input class="settings-input" id="${id}" type="${type}" value="${escH(String(value))}" placeholder="${placeholder}">`;
+
+  const toggleHtml = (id, on) =>
+    `<div class="toggle-row"><div class="toggle ${on ? 'on' : ''}" id="${id}" onclick="this.classList.toggle('on')"></div><span class="toggle-label" id="${id}_lbl">${on ? 'Visible' : 'Hidden'}</span></div>`;
+
+  // -- PROFILE --
+  section('PROFILE');
+  const emojiRow = document.createElement('div');
+  emojiRow.className = 'settings-row';
+  emojiRow.innerHTML = `<span class="settings-label">Emoji</span><button class="emoji-btn" id="emojiBtn" onclick="pickEmoji()">${S.emoji}</button>`;
+  body.appendChild(emojiRow);
+  row('@', input('sHandle', S.handle, 'text', 'handle'), 'at');
+  row('Name', input('sName', S.name));
+
+  // -- CURRENCY --
+  section('CURRENCY');
+  row('Display', `<select class="settings-select" id="sCurrency">
+    <option value="USD" ${S.currency==='USD'?'selected':''}>$ USD</option>
+    <option value="EUR" ${S.currency==='EUR'?'selected':''}>€ EUR</option>
+    <option value="GBP" ${S.currency==='GBP'?'selected':''}>£ GBP</option>
+  </select>`);
+
+  // -- CASH BALANCE --
+  section('CASH BALANCE');
+  row('Amount', input('sCashAmount', S.cashAmount, 'number'));
+  const cashToggleRow = document.createElement('div');
+  cashToggleRow.className = 'settings-row';
+  cashToggleRow.innerHTML = `<span class="settings-label">Show</span>
+    <div class="toggle-row">
+      <div class="toggle ${S.cashShow ? 'on' : ''}" id="sCashToggle" onclick="this.classList.toggle('on'); this.nextElementSibling.textContent = this.classList.contains('on') ? 'Visible' : 'Hidden'"></div>
+      <span class="toggle-label">${S.cashShow ? 'Visible' : 'Hidden'}</span>
+    </div>`;
+  body.appendChild(cashToggleRow);
+
+  // -- TOKEN AMOUNTS --
+  Object.keys(COINS).forEach(key => {
+    const coin = COINS[key];
+    const p = getPrice(key);
+    const imgUrl = p?.image || '';
+    const bg = coin.bg;
+
+    const tokenHeader = document.createElement('div');
+    tokenHeader.className = 'settings-token-header';
+    tokenHeader.innerHTML = `
+      <div class="settings-token-logo" style="background:${bg}">
+        ${imgUrl
+          ? `<img src="${imgUrl}" alt="${coin.sym}" onerror="this.style.display='none'">`
+          : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">${LOGOS[key] ? `<svg viewBox="0 0 48 48" style="width:20px;height:20px">${LOGOS[key].replace(/<svg[^>]*>/,'').replace('</svg>','')}</svg>` : coin.sym.slice(0,2)}</div>`
+        }
+      </div>
+      <span class="settings-token-name">${coin.name} (${coin.sym})</span>`;
+    body.appendChild(tokenHeader);
+
+    row('Amount', input(`sAmt_${key}`, S.amounts[key] ?? 0, 'number'));
+
+    if (coin.hasChain) {
+      const chain = S.chains[key] || 'SOL';
+      const chainRow = document.createElement('div');
+      chainRow.className = 'settings-row';
+      chainRow.innerHTML = `<span class="settings-label">Chain</span>
+        <div class="chain-selector" id="chain_${key}">
+          <button class="chain-btn ${chain==='SOL'?'active':''}" data-chain="SOL" onclick="selectChain('${key}','SOL',this)">SOL</button>
+          <button class="chain-btn ${chain==='ETH'?'active':''}" data-chain="ETH" onclick="selectChain('${key}','ETH',this)">ETH</button>
+        </div>`;
+      body.appendChild(chainRow);
+    }
+  });
+
+  // -- AUTO BALANCE --
+  section('AUTO BALANCE ON REFRESH');
+  row('SOL +', input('sAutoSol', S.autoSolPlus, 'number'));
+  const everyRow = document.createElement('div');
+  everyRow.className = 'settings-row';
+  everyRow.innerHTML = `<span class="settings-label">Every</span>
+    <div class="input-suffix-row">
+      <input class="settings-input" id="sAutoEvery" type="number" value="${S.autoEvery}" min="1">
+      <span class="input-suffix">refresh(es)</span>
+    </div>`;
+  body.appendChild(everyRow);
+
+  const progRow = document.createElement('div');
+  progRow.className = 'settings-row';
+  progRow.innerHTML = `<span class="settings-label">Progress</span><span class="progress-val">${S.autoProgress} / ${S.autoEvery}</span>`;
+  body.appendChild(progRow);
+
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reset-btn';
+  resetBtn.textContent = 'Reset Counter & Clear';
+  resetBtn.onclick = () => {
+    S.autoProgress = 0; S.autoSolPlus = 0;
+    document.getElementById('sAutoSol').value = 0;
+    progRow.querySelector('.progress-val').textContent = `0 / ${S.autoEvery || 1}`;
+    showToast('Counter reset');
+  };
+  body.appendChild(resetBtn);
+
+  // -- COINGECKO API --
+  section('COINGECKO API');
+  row('Key', `<input class="settings-input" id="sCgKey" type="text" value="${escH(S.cgKey)}" placeholder="Optional - lifts rate limits">`);
+  const proRow = document.createElement('div');
+  proRow.className = 'settings-row';
+  proRow.innerHTML = `<span class="settings-label">Pro Key</span>
+    <div class="toggle ${S.cgPro ? 'on' : ''}" id="sCgPro" onclick="this.classList.toggle('on')"></div>`;
+  body.appendChild(proRow);
+
+  // -- CUSTOM TOKENS SOLANA --
+  section('CUSTOM TOKENS (SOLANA)');
+  renderCustomTokenList(body, S.customSolana, 'SOL');
+  const addSolBtn = document.createElement('button');
+  addSolBtn.className = 'add-token-btn';
+  addSolBtn.textContent = '+ Add Token by Contract Address';
+  addSolBtn.onclick = () => addCustomToken('SOL');
+  body.appendChild(addSolBtn);
+
+  // -- CUSTOM TOKENS ETHEREUM --
+  section('CUSTOM TOKENS (ETHEREUM)');
+  renderCustomTokenList(body, S.customEthereum, 'ETH');
+  const addEthBtn = document.createElement('button');
+  addEthBtn.className = 'add-token-btn';
+  addEthBtn.textContent = '+ Add ETH Token by Contract Address';
+  addEthBtn.onclick = () => addCustomToken('ETH');
+  body.appendChild(addEthBtn);
+
+  // -- LANGUAGE --
+  const langSection = document.createElement('div');
+  langSection.style.cssText = 'display:flex;align-items:center;gap:12px;margin-top:22px';
+  langSection.innerHTML = `<span class="settings-label">Language</span>
+    <select class="settings-select" id="sLang">
+      <option value="EN" ${S.language==='EN'?'selected':''}>EN — English</option>
+      <option value="NL" ${S.language==='NL'?'selected':''}>NL — Nederlands</option>
+      <option value="DE" ${S.language==='DE'?'selected':''}>DE — Deutsch</option>
+    </select>`;
+  body.appendChild(langSection);
+
+  // -- SAVE --
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'save-btn';
+  saveBtn.textContent = 'Save';
+  saveBtn.onclick = saveSettings;
+  body.appendChild(saveBtn);
+}
+
+function renderCustomTokenList(container, tokens, chain) {
+  const wrapperId = `customList_${chain}`;
+  let wrapper = document.getElementById(wrapperId);
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.id = wrapperId;
+    container.appendChild(wrapper);
+  }
+  wrapper.innerHTML = '';
+  tokens.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'custom-token-row';
+    row.innerHTML = `
+      <div class="ct-logo">
+        ${t.image ? `<img src="${t.image}" alt="${t.sym}">` : `<span>${(t.sym||'?').slice(0,2)}</span>`}
+      </div>
+      <div class="ct-info">
+        <div class="ct-name">${escH(t.name || t.sym || 'Unknown')}</div>
+        <div class="ct-addr">${escH(t.address || '')}</div>
+      </div>
+      <input class="settings-input" style="width:70px;flex:none" type="number" value="${t.amount||0}" onchange="updateCustomAmount('${chain}',${i},this.value)">
+      <button class="ct-remove" onclick="removeCustomToken('${chain}',${i})">×</button>`;
+    wrapper.appendChild(row);
+  });
+}
+
+function selectChain(key, chain, btn) {
+  const parent = btn.closest('.chain-selector');
+  parent.querySelectorAll('.chain-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateCustomAmount(chain, idx, val) {
+  const arr = chain === 'SOL' ? S.customSolana : S.customEthereum;
+  if (arr[idx]) arr[idx].amount = parseFloat(val) || 0;
+}
+
+function removeCustomToken(chain, idx) {
+  if (chain === 'SOL') S.customSolana.splice(idx, 1);
+  else S.customEthereum.splice(idx, 1);
+  buildSettingsForm();
+}
+
+async function addCustomToken(chain) {
+  const address = prompt(`Enter ${chain} contract address:`);
+  if (!address || !address.trim()) return;
+
+  showToast('Looking up token…');
+  let tokenData = null;
+
+  if (S.cgKey) {
+    tokenData = await lookupCustomToken(address.trim(), chain);
+  }
+
+  const newToken = {
+    address: address.trim(),
+    name: tokenData?.name || 'Unknown Token',
+    sym: tokenData?.symbol?.toUpperCase() || '???',
+    symbol: tokenData?.symbol?.toUpperCase() || '???',
+    cgId: tokenData?.id || null,
+    image: tokenData?.image?.large || tokenData?.image?.small || null,
+    amount: 0,
+    chain,
+    bg: '#555',
+  };
+
+  if (chain === 'SOL') S.customSolana.push(newToken);
+  else S.customEthereum.push(newToken);
+
+  if (tokenData) showToast(`Found: ${newToken.name}`);
+  else showToast('Token added (price unavailable without API key)');
+
+  buildSettingsForm();
+  if (tokenData?.id) fetchPrices();
+}
+
+async function saveSettings() {
+  S.emoji    = document.getElementById('emojiBtn').textContent;
+  S.handle   = document.getElementById('sHandle').value.trim().replace(/^@/,'');
+  S.name     = document.getElementById('sName').value.trim();
+  S.currency = document.getElementById('sCurrency').value;
+  S.cashAmount = parseFloat(document.getElementById('sCashAmount').value) || 0;
+  S.cashShow = document.getElementById('sCashToggle').classList.contains('on');
+  S.cgKey    = document.getElementById('sCgKey').value.trim();
+  S.cgPro    = document.getElementById('sCgPro').classList.contains('on');
+  S.autoSolPlus = parseFloat(document.getElementById('sAutoSol').value) || 0;
+  S.autoEvery = parseInt(document.getElementById('sAutoEvery').value) || 1;
+  S.language = document.getElementById('sLang').value;
+
+  Object.keys(COINS).forEach(key => {
+    const el = document.getElementById(`sAmt_${key}`);
+    if (el) S.amounts[key] = parseFloat(el.value) || 0;
+    if (COINS[key].hasChain) {
+      const active = document.querySelector(`#chain_${key} .chain-btn.active`);
+      if (active) S.chains[key] = active.dataset.chain;
+    }
+  });
+
+  localStorage.setItem('larpz-s', JSON.stringify(S));
+  closeSettings();
+  showToast('Saved!');
+  renderWallet();
+  fetchPrices();
+}
+
+// ── EMOJI PICKER ──────────────────────────────────────────────────
+const EMOJIS = ['👻','🦊','🐺','🐸','🦅','🦁','🐯','🦄','🐉','🤖','👾','💀','🎃','🔮','💎','🚀','🌙','⚡','🔥','🌊','💫','🎯','🛸','🦝','🐙'];
+
+function pickEmoji() {
+  const existing = document.getElementById('emojiPicker');
+  if (existing) { existing.remove(); return; }
+  const picker = document.createElement('div');
+  picker.id = 'emojiPicker';
+  picker.style.cssText = `
+    position:fixed; z-index:400; background:#2c2c2e; border-radius:16px;
+    padding:12px; display:flex; flex-wrap:wrap; gap:8px; max-width:260px;
+    box-shadow:0 8px 32px rgba(0,0,0,.6);
+    top:50%; left:50%; transform:translate(-50%,-50%);
+  `;
+  EMOJIS.forEach(e => {
+    const btn = document.createElement('button');
+    btn.textContent = e;
+    btn.style.cssText = 'background:none;border:none;font-size:26px;cursor:pointer;padding:4px;border-radius:8px;';
+    btn.onmouseenter = () => btn.style.background = '#3a3a3c';
+    btn.onmouseleave = () => btn.style.background = 'none';
+    btn.onclick = () => {
+      const eb = document.getElementById('emojiBtn');
+      if (eb) eb.textContent = e;
+      picker.remove();
+    };
+    picker.appendChild(btn);
+  });
+  document.body.appendChild(picker);
+  setTimeout(() => document.addEventListener('click', function h(ev) {
+    if (!picker.contains(ev.target) && ev.target.id !== 'emojiBtn') {
+      picker.remove(); document.removeEventListener('click', h);
+    }
+  }), 50);
+}
+
+// ── AUTO BALANCE ──────────────────────────────────────────────────
+function runAutoBalance() {
+  if (!S.autoSolPlus || S.autoSolPlus <= 0) return;
+  S.autoProgress = (S.autoProgress || 0) + 1;
+  if (S.autoProgress >= S.autoEvery) {
+    S.amounts.sol = (parseFloat(S.amounts.sol) || 0) + parseFloat(S.autoSolPlus);
+    S.autoProgress = 0;
+  }
+  localStorage.setItem('larpz-s', JSON.stringify(S));
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ── SANITIZE ──────────────────────────────────────────────────────
+function escH(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  runAutoBalance();
+  renderWallet();
+  fetchPrices();
+});
+</script>
 </body>
 </html>
