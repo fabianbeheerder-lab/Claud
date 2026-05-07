@@ -11,19 +11,20 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #1a1a1f;
-      --bg-card: #252530;
-      --bg-card2: #2e2e3a;
-      --bg-input: #2e2e3a;
+      --bg: #111111;
+      --bg-card: #222222;
+      --bg-card2: #2c2c2c;
+      --bg-input: #2a2a2a;
       --purple: #7b61ff;
-      --purple-light: #9b8fff;
+      --purple-light: #ad9ef8;
       --green: #30d158;
       --green-bg: #0d2e1a;
-      --red: #ff6135;
-      --text-primary: #ffffff;
-      --text-secondary: #8e8e9a;
-      --text-gray: #606068;
-      --border: #2e2e3a;
+      --red: #cc371c;
+      --red-badge: #f83b18;
+      --text-primary: #eeeded;
+      --text-secondary: #6e6e6d;
+      --text-gray: #505050;
+      --border: #2c2c2c;
       --radius: 16px;
     }
 
@@ -114,7 +115,7 @@
       padding: 4px 10px; border-radius: 20px;
     }
     .change-pct.pos { background: #143d24; color: var(--green); }
-    .change-pct.neg { background: var(--red); color: #fff; }
+    .change-pct.neg { background: var(--red-badge); color: #fff; }
 
     /* ── ACTIONS ── */
     .actions { display: flex; padding: 0 20px; gap: 8px; margin-bottom: 16px; }
@@ -144,8 +145,8 @@
     .cash-label { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
     .cash-amount { font-size: 22px; font-weight: 600; }
     .add-cash-btn {
-      background: #6d5df5; color: #fff; border: none;
-      border-radius: 12px; padding: 13px 18px;
+      background: #ad9ef8; color: #1a1428; border: none;
+      border-radius: 22px; padding: 13px 20px;
       font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
       transition: opacity .15s; white-space: nowrap; letter-spacing: -0.1px;
     }
@@ -154,7 +155,7 @@
     /* ── TOKENS ── */
     .tokens-header { display: flex; align-items: center; gap: 4px; padding: 0 20px 10px; }
     .tokens-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-    .tokens-arrow { font-size: 16px; color: var(--text-secondary); font-weight: 500; margin-top: 1px; }
+    .tokens-arrow { font-size: 16px; color: #b4b4b4; font-weight: 500; margin-top: 1px; }
     .tokens-list { display: flex; flex-direction: column; gap: 6px; padding: 0 20px; }
 
     .token-item {
