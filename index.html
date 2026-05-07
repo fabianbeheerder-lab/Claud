@@ -11,10 +11,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #16161a;
-      --bg-card: #202028;
-      --bg-card2: #2a2a34;
-      --bg-input: #2a2a34;
+      --bg: #1a1a1f;
+      --bg-card: #252530;
+      --bg-card2: #2e2e3a;
+      --bg-input: #2e2e3a;
       --purple: #7b61ff;
       --purple-light: #9b8fff;
       --green: #30d158;
@@ -23,7 +23,7 @@
       --text-primary: #ffffff;
       --text-secondary: #8e8e9a;
       --text-gray: #606068;
-      --border: #2c2c36;
+      --border: #2e2e3a;
       --radius: 16px;
     }
 
@@ -113,13 +113,13 @@
       font-size: 13px; font-weight: 700;
       padding: 4px 10px; border-radius: 20px;
     }
-    .change-pct.pos { background: var(--green-bg); color: var(--green); }
+    .change-pct.pos { background: #143d24; color: var(--green); }
     .change-pct.neg { background: var(--red); color: #fff; }
 
     /* ── ACTIONS ── */
     .actions { display: flex; padding: 0 20px; gap: 8px; margin-bottom: 16px; }
     .action-btn {
-      flex: 1; background: #28283a; border: none; border-radius: 14px;
+      flex: 1; background: var(--bg-card); border: none; border-radius: 14px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 8px; padding: 16px 6px 14px; cursor: pointer; transition: background .15s;
     }
