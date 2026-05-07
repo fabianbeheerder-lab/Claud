@@ -89,62 +89,61 @@
     .scroll-content::-webkit-scrollbar { display: none; }
 
     /* ── BALANCE ── */
-    .balance-section { padding: 8px 20px 24px; }
+    .balance-section { padding: 4px 20px 20px; }
     .balance-amount {
-      font-size: 52px; font-weight: 800; letter-spacing: -2px; line-height: 1.05;
-      margin-bottom: 10px; white-space: nowrap; overflow: hidden;
-      transition: font-size .1s;
+      font-size: 48px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.05;
+      margin-bottom: 8px; text-align: left;
     }
     .balance-change { display: flex; align-items: center; gap: 8px; }
-    .change-usd { font-size: 16px; font-weight: 500; }
+    .change-usd { font-size: 15px; font-weight: 500; }
     .change-usd.pos { color: var(--green); }
     .change-usd.neg { color: var(--red); }
     .change-pct {
       font-size: 13px; font-weight: 700;
-      padding: 4px 10px; border-radius: 8px;
+      padding: 3px 9px; border-radius: 7px;
     }
     .change-pct.pos { background: var(--green-bg); color: var(--green); }
     .change-pct.neg { background: var(--red); color: #fff; }
 
     /* ── ACTIONS ── */
-    .actions { display: flex; padding: 0 20px; gap: 10px; margin-bottom: 24px; }
+    .actions { display: flex; padding: 0 20px; gap: 10px; margin-bottom: 20px; }
     .action-btn {
       flex: 1; background: var(--bg-card); border: none; border-radius: var(--radius);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 7px; padding: 16px 8px; cursor: pointer; transition: background .15s;
+      gap: 8px; padding: 18px 8px 16px; cursor: pointer; transition: background .15s;
     }
     .action-btn:active { background: var(--bg-card2); }
-    .action-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; }
+    .action-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
     .action-icon svg {
-      width: 22px; height: 22px;
+      width: 20px; height: 20px;
       stroke: var(--purple-light); fill: none;
       stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
-    .action-label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .action-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
 
     /* ── CASH CARD ── */
     .cash-card {
-      margin: 0 20px 28px;
+      margin: 0 20px 24px;
       background: var(--bg-card);
       border-radius: var(--radius);
-      padding: 16px 18px;
+      padding: 16px 16px;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .cash-info { display: flex; flex-direction: column; gap: 3px; }
-    .cash-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
-    .cash-amount { font-size: 20px; font-weight: 700; }
+    .cash-info { display: flex; flex-direction: column; gap: 4px; }
+    .cash-label { font-size: 14px; color: var(--text-secondary); font-weight: 400; }
+    .cash-amount { font-size: 22px; font-weight: 700; }
     .add-cash-btn {
-      background: var(--purple); color: #fff; border: none;
-      border-radius: 50px; padding: 11px 20px;
+      background: rgba(139, 92, 246, 0.32); color: #fff; border: none;
+      border-radius: 50px; padding: 12px 20px;
       font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
-      transition: background .15s;
+      transition: background .15s; white-space: nowrap;
     }
-    .add-cash-btn:active { background: var(--purple-light); }
+    .add-cash-btn:active { background: rgba(139, 92, 246, 0.5); }
 
     /* ── TOKENS ── */
-    .tokens-header { display: flex; align-items: center; gap: 4px; padding: 0 20px 14px; }
-    .tokens-title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
-    .tokens-arrow { font-size: 18px; color: var(--text-secondary); font-weight: 600; margin-top: 2px; }
+    .tokens-header { display: flex; align-items: center; gap: 4px; padding: 0 20px 12px; }
+    .tokens-title { font-size: 20px; font-weight: 700; letter-spacing: -0.2px; }
+    .tokens-arrow { font-size: 17px; color: var(--text-secondary); font-weight: 600; margin-top: 2px; }
     .tokens-list { display: flex; flex-direction: column; gap: 8px; padding: 0 20px; }
 
     .token-item {
@@ -480,7 +479,7 @@
         <span class="cash-label">Cash Balance</span>
         <span class="cash-amount" id="cashAmountDisplay">$0.00</span>
       </div>
-      <button class="add-cash-btn">Add Cash</button>
+      <button class="add-cash-btn">Open Cash</button>
     </div>
 
     <div class="tokens-header">
@@ -645,17 +644,6 @@ function fmtPct(n) {
   return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
 }
 
-function fitBalance(el) {
-  el.style.fontSize = '';
-  const max = el.parentElement.offsetWidth - 40;
-  let size = 52;
-  el.style.fontSize = size + 'px';
-  while (el.scrollWidth > max && size > 26) {
-    size -= 1;
-    el.style.fontSize = size + 'px';
-  }
-}
-
 function getPrice(key) {
   const coin = COINS[key];
   if (!coin) return null;
@@ -692,9 +680,7 @@ function renderWallet() {
     }
   });
 
-  const balEl = document.getElementById('balanceAmount');
-  balEl.textContent = fmt(totalUsd);
-  fitBalance(balEl);
+  document.getElementById('balanceAmount').textContent = fmt(totalUsd);
 
   const changeUsdEl = document.getElementById('changeUsd');
   const changePctEl = document.getElementById('changePct');
