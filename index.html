@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Larpz Wallet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0f0f0f;
+      --bg-card: #1c1c1e;
+      --bg-card2: #2c2c2e;
+      --purple: #7b61ff;
+      --purple-light: #9b8fff;
+      --green: #34c759;
+      --green-bg: #1a3a23;
+      --text-primary: #ffffff;
+      --text-secondary: #8e8e93;
+      --text-gray: #636366;
+      --border: #2c2c2e;
+      --radius: 16px;
+      --radius-sm: 12px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── STICKY HEADER ─────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      padding: 14px 20px 12px;
+      gap: 12px;
+    }
+
+    .header-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #2c2c2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .header-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .header-handle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .header-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .header-icons {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .header-icon-btn svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--text-primary);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── SCROLLABLE CONTENT ────────────────────────── */
+    .scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 80px;
+    }
+
+    .scroll-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ── BALANCE SECTION ───────────────────────────── */
+    .balance-section {
+      padding: 8px 20px 24px;
+    }
+
+    .balance-amount {
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .balance-change {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .balance-change-usd {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .balance-change-pct {
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 8px;
+    }
+
+    /* ── ACTION BUTTONS ────────────────────────────── */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 16px 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .action-btn:active {
+      background: var(--bg-card2);
+    }
+
+    .action-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--purple-light);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .action-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+
+    /* ── CASH BALANCE CARD ─────────────────────────── */
+    .cash-card {
+      margin: 0 20px 28px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cash-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .cash-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .cash-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .add-cash-btn {
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 11px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+      transition: background 0.15s;
+    }
+
+    .add-cash-btn:active {
+      background: var(--purple-light);
+    }
+
+    /* ── TOKENS SECTION ────────────────────────────── */
+    .tokens-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 20px 14px;
+    }
+
+    .tokens-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .tokens-arrow {
+      font-size: 18px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .tokens-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 20px;
+    }
+
+    .token-item {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .token-item:active {
+      background: var(--bg-card2);
+    }
+
+    .token-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      overflow: hidden;
+    }
+
+    /* Token logo colors */
+    .token-logo.sol {
+      background: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
+    }
+
+    .token-logo.eth {
+      background: #627eea;
+    }
+
+    .token-logo.btc {
+      background: #f7931a;
+    }
+
+    .token-logo.mon {
+      background: #fff;
+    }
+
+    .token-logo.sui {
+      background: #4da2ff;
+    }
+
+    .token-logo.pol {
+      background: #8247e5;
+    }
+
+    .token-logo.hype {
+      background: #00d4aa;
+    }
+
+    /* SVG logos inside token circles */
+    .token-logo svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .token-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .token-name-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .token-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #5856d6;
+      flex-shrink: 0;
+    }
+
+    .verified-badge svg {
+      width: 10px;
+      height: 10px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .token-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .token-values {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .token-usd {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .token-change {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .token-change.positive {
+      color: var(--green);
+    }
+
+    /* ── DISCLOSURES ───────────────────────────────── */
+    .disclosures {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 20px 20px 8px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .disclosures-icon {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--text-secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    /* ── BOTTOM NAV ────────────────────────────────── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0 24px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 18px;
+      border-radius: 10px;
+    }
+
+    .nav-btn svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--text-secondary);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-btn.active svg {
+      stroke: var(--purple-light);
+    }
+
+    .nav-btn.active .nav-home-fill {
+      fill: var(--purple-light);
+      stroke: var(--purple-light);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+
+    <!-- ── STICKY HEADER ── -->
+    <header class="header">
+      <div class="header-avatar">👻</div>
+      <div class="header-info">
+        <span class="header-handle">@larpzwallet</span>
+        <span class="header-name">Larpz Wallet</span>
+      </div>
+      <div class="header-icons">
+        <!-- Clock icon -->
+        <button class="header-icon-btn" aria-label="History">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </button>
+        <!-- Search icon -->
+        <button class="header-icon-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── SCROLLABLE CONTENT ── -->
+    <div class="scroll-content">
+
+      <!-- Balance -->
+      <section class="balance-section">
+        <div class="balance-amount">$1,957.34</div>
+        <div class="balance-change">
+          <span class="balance-change-usd">+$56.87</span>
+          <span class="balance-change-pct">+2.91%</span>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <!-- Send -->
+        <button class="action-btn">
+          <span class="action-icon">
+            <svg viewBox="0 0 24 24">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </span>
+          <span class="action-label">Send</span>
+        </button>
+        <!-- Swap -->
+        <button class="action-btn">
+          <span class="action-icon">
+            <svg viewBox="0 0 24 24">
+              <polyline points="17 1 21 5 17 9"/>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
+          </span>
+          <span class="action-label">Swap</span>
+        </button>
+        <!-- Receive -->
+        <button class="action-btn">
+          <span class="action-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="3" height="3"/>
+              <rect x="18" y="14" width="3" height="3"/>
+              <rect x="14" y="18" width="3" height="3"/>
+              <rect x="18" y="18" width="3" height="3"/>
+              <!-- QR inner dots -->
+              <rect x="5" y="5" width="3" height="3" rx="0.5" style="fill:#9b8fff;stroke:none"/>
+              <rect x="16" y="5" width="3" height="3" rx="0.5" style="fill:#9b8fff;stroke:none"/>
+              <rect x="5" y="16" width="3" height="3" rx="0.5" style="fill:#9b8fff;stroke:none"/>
+            </svg>
+          </span>
+          <span class="action-label">Receive</span>
+        </button>
+        <!-- Buy -->
+        <button class="action-btn">
+          <span class="action-icon">
+            <svg viewBox="0 0 24 24">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </span>
+          <span class="action-label">Buy</span>
+        </button>
+      </div>
+
+      <!-- Cash Balance Card -->
+      <div class="cash-card">
+        <div class="cash-info">
+          <span class="cash-label">Cash Balance</span>
+          <span class="cash-amount">$0.00</span>
+        </div>
+        <button class="add-cash-btn">Add Cash</button>
+      </div>
+
+      <!-- Tokens -->
+      <div class="tokens-header">
+        <span class="tokens-title">Tokens</span>
+        <span class="tokens-arrow">›</span>
+      </div>
+
+      <div class="tokens-list">
+
+        <!-- Solana -->
+        <div class="token-item">
+          <div class="token-logo sol">
+            <!-- Solana S logo -->
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M10 45.5l7.5-7.5h36.5l-7.5 7.5H10z" fill="#fff"/>
+              <path d="M10 26l7.5-7.5h36.5L46.5 26H10z" fill="#fff"/>
+              <path d="M46.5 18l7.5 7.5H17.5L10 18h36.5z" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Solana</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">22 SOL</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$1,957.34</span>
+            <span class="token-change positive">+$56.87</span>
+          </div>
+        </div>
+
+        <!-- Ethereum -->
+        <div class="token-item">
+          <div class="token-logo eth">
+            <!-- ETH diamond -->
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M16 4l-8 12 8 5 8-5L16 4z" fill="rgba(255,255,255,0.85)"/>
+              <path d="M8 16l8 12 8-12-8 5L8 16z" fill="rgba(255,255,255,0.65)"/>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Ethereum</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">0 ETH</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$0.00</span>
+            <span class="token-change">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Bitcoin -->
+        <div class="token-item">
+          <div class="token-logo btc">
+            <!-- BTC B -->
+            <svg viewBox="0 0 32 32" fill="none">
+              <text x="7" y="23" font-size="20" font-weight="900" fill="white" font-family="Arial,sans-serif">₿</text>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Bitcoin</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">0 BTC</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$0.00</span>
+            <span class="token-change">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Monad -->
+        <div class="token-item">
+          <div class="token-logo mon" style="background:#fff;">
+            <!-- Monad diamond/square icon -->
+            <svg viewBox="0 0 32 32" fill="none">
+              <rect x="8" y="8" width="16" height="16" rx="3" stroke="#6b21a8" stroke-width="2.5" fill="none"/>
+              <circle cx="16" cy="16" r="3.5" fill="#6b21a8"/>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Monad</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">0 MON</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$0.00</span>
+            <span class="token-change">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Sui -->
+        <div class="token-item">
+          <div class="token-logo sui">
+            <!-- Sui droplet -->
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M16 5C16 5 8 13 8 19a8 8 0 0 0 16 0c0-6-8-14-8-14z" fill="white"/>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Sui</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">0 SUI</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$0.00</span>
+            <span class="token-change">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Polygon -->
+        <div class="token-item">
+          <div class="token-logo pol">
+            <!-- Polygon logo -->
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M20 10l-4 2.3-4-2.3L8 12.6v5.2l4 2.3v4.6l4-2.3 4 2.3v-4.6l4-2.3v-5.2L20 10z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Polygon</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">0 POL</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$0.00</span>
+            <span class="token-change">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Hyperliquid -->
+        <div class="token-item">
+          <div class="token-logo hype">
+            <!-- Hyperliquid squiggle / bowtie -->
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M6 16c2-4 5-6 8-6s5 4 8 4 5-4 8-4" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <path d="M6 16c2 4 5 6 8 6s5-4 8-4 5 4 8 4" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="token-info">
+            <div class="token-name-row">
+              <span class="token-name">Hyperliquid</span>
+              <span class="verified-badge">
+                <svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+              </span>
+            </div>
+            <span class="token-sub">0 HYPE</span>
+          </div>
+          <div class="token-values">
+            <span class="token-usd">$0.00</span>
+            <span class="token-change">$0.00</span>
+          </div>
+        </div>
+
+      </div><!-- /tokens-list -->
+
+      <!-- View Disclosures -->
+      <div class="disclosures">
+        <div class="disclosures-icon">i</div>
+        <span>View disclosures</span>
+      </div>
+
+    </div><!-- /scroll-content -->
+
+    <!-- ── BOTTOM NAV ── -->
+    <nav class="bottom-nav">
+      <!-- Home (active) -->
+      <button class="nav-btn active" aria-label="Home">
+        <svg viewBox="0 0 24 24">
+          <path class="nav-home-fill" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <!-- Cards/Wallet -->
+      <button class="nav-btn" aria-label="Cards">
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+      </button>
+      <!-- Swap -->
+      <button class="nav-btn" aria-label="Swap">
+        <svg viewBox="0 0 24 24">
+          <polyline points="17 1 21 5 17 9"/>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+      </button>
+      <!-- Messages -->
+      <button class="nav-btn" aria-label="Messages">
+        <svg viewBox="0 0 24 24">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </button>
+      <!-- Search -->
+      <button class="nav-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </nav>
+
+  </div><!-- /phone -->
+</body>
+</html>
