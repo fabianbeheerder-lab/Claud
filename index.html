@@ -787,15 +787,18 @@ function renderTokenList() {
     const isZero = usdVal === 0;
     const div = document.createElement('div');
     div.className = 'token-item' + (isZero ? ' zero' : '');
+    const fallbackLogo = LOGOS[token.key] || `<span style="font-size:13px;font-weight:900;color:white">${sym.slice(0,3)}</span>`;
     div.innerHTML = `
-      ${imgUrl
-        ? `<div class="token-logo" style="background:${bg}"><img src="${imgUrl}" alt="${sym}" onerror="this.style.display='none'"></div>`
-        : `<div class="token-logo" style="background:${bg}"><div class="logo-fallback">${LOGOS[token.key] || `<span style="font-size:13px;font-weight:900;color:white">${sym.slice(0,3)}</span>`}</div></div>`
-      }
+      <div class="token-logo" style="background:${bg}">
+        ${imgUrl
+          ? `<img src="${imgUrl}" alt="${sym}" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=\\"logo-fallback\\">${fallbackLogo.replace(/"/g,"'")}</div>')">`
+          : `<div class="logo-fallback">${fallbackLogo}</div>`
+        }
+      </div>
       <div class="token-info">
         <div class="token-name-row">
           <span class="token-name">${name}</span>
-          <svg class="verified-badge" width="15" height="15" viewBox="0 0 24 24"><polygon fill="#b19ffb" points="12,2 14.7,5.5 19.1,4.9 18.5,9.3 22,12 18.5,14.7 19.1,19.1 14.7,18.5 12,22 9.3,18.5 4.9,19.1 5.5,14.7 2,12 5.5,9.3 4.9,4.9 9.3,5.5"/><polyline points="8.5 12 11 15 16 9" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="verified-badge" width="17" height="17" viewBox="0 0 24 24"><polygon fill="#b19ffb" points="12,2 14.7,5.5 19.1,4.9 18.5,9.3 22,12 18.5,14.7 19.1,19.1 14.7,18.5 12,22 9.3,18.5 4.9,19.1 5.5,14.7 2,12 5.5,9.3 4.9,4.9 9.3,5.5"/><polyline points="8.5 12 11 15 16 9" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <span class="token-sub">${amt % 1 === 0 ? amt : amt.toFixed(4)} ${sym}</span>
       </div>
