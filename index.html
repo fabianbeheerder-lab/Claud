@@ -791,7 +791,7 @@ function renderTokenList() {
     div.innerHTML = `
       <div class="token-logo" style="background:${bg}">
         ${imgUrl
-          ? `<img src="${imgUrl}" alt="${sym}" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=\\"logo-fallback\\">${fallbackLogo.replace(/"/g,"'")}</div>')">`
+          ? `<img src="${imgUrl}" alt="${sym}" onerror="handleImgError(this,'${token.key}')">`
           : `<div class="logo-fallback">${fallbackLogo}</div>`
         }
       </div>
@@ -1136,6 +1136,12 @@ function runAutoBalance() {
   }
   localStorage.setItem('larpz-s', JSON.stringify(S));
   return false;
+}
+
+function handleImgError(el, key) {
+  el.style.display = 'none';
+  const fb = LOGOS[key];
+  if (fb) el.insertAdjacentHTML('afterend', `<div class="logo-fallback">${fb}</div>`);
 }
 
 function triggerRefresh() {
